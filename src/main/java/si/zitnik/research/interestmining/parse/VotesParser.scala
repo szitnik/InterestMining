@@ -1,7 +1,10 @@
 package si.zitnik.research.interestmining.parse
 
 import collection.mutable.ArrayBuffer
-import si.zitnik.research.interestmining.model.Vote
+import si.zitnik.research.interestmining.model.stackoverflow.Vote
+import si.zitnik.research.interestmining.writer.db.DBWriter
+import java.io.{FileReader, BufferedReader}
+import xml.XML
 
 /**
   * Created with IntelliJ IDEA.
@@ -12,13 +15,19 @@ import si.zitnik.research.interestmining.model.Vote
   */
 class VotesParser(filename: String) {
 
-   def parse(): ArrayBuffer[Vote] = {
-     val retVal = ArrayBuffer[Vote]()
+   def parse(maxToParse: Int = Int.MaxValue) {
 
-     val file = scala.xml.XML.loadFile(filename)
+     val writer = DBWriter.instance()
 
-     for (row <- file \\ "row") {
-       retVal += Vote(
+     val reader = new BufferedReader(new FileReader(filename))
+     var line = ""
+     var counter = 0
+
+     while (line != null && counter < maxToParse) {
+       line = reader.readLine()
+       if (line != null && line.toString().contains("<row")) {
+         val row = XML.loadString(line.toString)
+       val vote = Vote(
          (row \ "@Id").text.toInt,
          (row \ "@PostId").text.toInt,
            (row \ "@VoteTypeId").text.toInt,
@@ -32,10 +41,19 @@ class VotesParser(filename: String) {
                    case None => None
                  }
        )
+       if (writer.insertEvidence(vote.toSql(), vote.PostId.toString)) {
+         counter += 1
+         if (counter % 100 == 0) {
+           println(counter)
+           writer.commit()
+         }
+       }
+
+
+       }
      }
 
 
-     retVal
    }
 
  }

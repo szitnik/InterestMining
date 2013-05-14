@@ -1,7 +1,6 @@
 package si.zitnik.research.interestmining.parse
 
-import collection.mutable.ArrayBuffer
-import si.zitnik.research.interestmining.model.stackoverflow.Badge
+import si.zitnik.research.interestmining.model.stackoverflow.{Comment, Badge}
 import si.zitnik.research.interestmining.writer.db.DBWriter
 import java.io.{FileReader, BufferedReader}
 import xml.XML
@@ -13,7 +12,7 @@ import xml.XML
   * Time: 9:10 PM
   * To change this template use File | Settings | File Templates.
   */
-class BadgesParser(filename: String) {
+class CommentsParser(filename: String) {
 
   def parse(maxToParse: Int = Int.MaxValue) {
 
@@ -27,17 +26,20 @@ class BadgesParser(filename: String) {
       line = reader.readLine()
       if (line != null && line.toString().contains("<row")) {
         val row = XML.loadString(line.toString)
-       val badge = Badge(
+       val comment = Comment(
          (row \ "@Id").text.toInt,
-         (row \ "@UserId").text.toInt,
-           (row \ "@Name").text,
-             (row \ "@Date").text
+         (row \ "@PostId").text.toInt,
+         (row \ "@Score").text,
+         (row \ "@Text").text,
+         (row \ "@CreationDate").text,
+         if ((row \ "@UserId").text.isEmpty) {-1} else {(row \ "@UserId").text.toInt}
        )
-        writer.insert(badge.toSql())
-        counter += 1
-        if (counter % 100 == 0) {
-          println(counter)
-          writer.commit()
+        if (writer.insertEvidence(comment.toSql(), comment.PostId.toString)) {
+          counter += 1
+          if (counter % 100 == 0) {
+            println(counter)
+            writer.commit()
+          }
         }
       }
     }

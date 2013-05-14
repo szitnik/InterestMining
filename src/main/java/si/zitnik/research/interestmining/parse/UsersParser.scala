@@ -1,10 +1,11 @@
 package si.zitnik.research.interestmining.parse
 
 import collection.mutable.ArrayBuffer
-import si.zitnik.research.interestmining.model.User
 import si.zitnik.research.interestmining.writer.CSVWriter
 import java.io.{FileReader, BufferedReader}
 import xml.XML
+import si.zitnik.research.interestmining.model.stackoverflow.User
+import si.zitnik.research.interestmining.writer.db.DBWriter
 
 /**
  * Created with IntelliJ IDEA.
@@ -15,15 +16,15 @@ import xml.XML
  */
 class UsersParser(filename: String) {
 
-  def parse() {
-    val writer = new CSVWriter(
-      "csv/users.csv",
-      Some("%s\t%s\t%s\t%s".format("Id", "Reputation", "Trust", "Distrust"))
-    )
+  def parse(maxToParse: Int = Int.MaxValue) {
+
+    val writer = DBWriter.instance()
+
     val reader = new BufferedReader(new FileReader(filename))
     var line = ""
     var counter = 0
-    while (line != null) {
+
+    while (line != null && counter < maxToParse) {
       line = reader.readLine()
       if (line != null && line.toString().contains("<row")) {
         val row = XML.loadString(line.toString)
@@ -42,20 +43,14 @@ class UsersParser(filename: String) {
           (row \ "@UpVotes").text.toInt,
           (row \ "@DownVotes").text.toInt
         )
-        writer.write(Array(
-          user.Id.toString.toString,
-          user.Reputation.toString,
-          1.toString,
-          1.toString
-        ))
+        writer.insert(user.toSql())
         counter += 1
         if (counter % 100 == 0) {
           println(counter)
+          writer.commit()
         }
       }
     }
-
-    writer.close()
   }
 
 }
