@@ -1,4 +1,4 @@
-package si.zitnik.research.interestmining.parse
+package si.zitnik.research.interestmining.stackoverflow
 
 import collection.mutable.ArrayBuffer
 import si.zitnik.research.interestmining.model.stackoverflow.Vote

@@ -1,4 +1,4 @@
-package si.zitnik.research.interestmining.parse
+package si.zitnik.research.interestmining.stackoverflow
 
 import collection.mutable.ArrayBuffer
 import si.zitnik.research.interestmining.writer.CSVWriter
@@ -29,7 +29,7 @@ class UsersParser(filename: String) {
       if (line != null && line.toString().contains("<row")) {
         val row = XML.loadString(line.toString)
         val user = User(
-          (row \ "@Id").text.toInt,
+          (row \ "@Id").text,
           (row \ "@Reputation").text.toInt,
           (row \ "@CreationDate").text,
           (row \ "@DisplayName").text,

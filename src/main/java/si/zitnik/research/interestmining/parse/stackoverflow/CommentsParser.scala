@@ -1,4 +1,4 @@
-package si.zitnik.research.interestmining.parse
+package si.zitnik.research.interestmining.stackoverflow
 
 import si.zitnik.research.interestmining.model.stackoverflow.{Comment, Badge}
 import si.zitnik.research.interestmining.writer.db.DBWriter

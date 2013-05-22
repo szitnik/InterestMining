@@ -1,7 +1,9 @@
 package si.zitnik.research.interestmining
 
 import parse._
+import stackoverflow._
 import writer.db.DBWriter
+import yahoo.L6Parser
 
 /**
  * Created with IntelliJ IDEA.
@@ -12,7 +14,7 @@ import writer.db.DBWriter
  */
 object TransformRunner {
 
-  def main(args: Array[String]) {
+  def stackoveflow() {
     val folder = "/Users/slavkoz/Documents/DR_Research/Datasets/Stack Exchange Data Dump - Sept 2011/Content/092011 Stack Overflow/%s"
     val maxToParse = 1000
 
@@ -44,6 +46,28 @@ object TransformRunner {
 
 
     DBWriter.instance().close()
+  }
+
+  def yahooL6() {
+    val filename = "/Users/slavkoz/Documents/DR_Research/Datasets/Webscope_L6/Webscope_L6/FullOct2007.xml"
+    val maxToParse = 100000
+
+    //Evidences are continuously added
+    DBWriter.instance().delete("DELETE FROM dbo.EvidencePost")
+    DBWriter.instance().delete("DELETE FROM dbo.Evidence")
+    DBWriter.instance().delete("DELETE FROM dbo.Users")
+    DBWriter.instance().delete("DELETE FROM dbo.Posts")
+
+    println("Doing ...")
+    new L6Parser(filename).parse(maxToParse)
+
+    DBWriter.instance().close()
+  }
+
+  def main(args: Array[String]) {
+    //stackoveflow()
+    yahooL6()
+
   }
 
 }

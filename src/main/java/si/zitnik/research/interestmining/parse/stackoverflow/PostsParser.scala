@@ -1,4 +1,4 @@
-package si.zitnik.research.interestmining.parse
+package si.zitnik.research.interestmining.stackoverflow
 
 import collection.mutable.ArrayBuffer
 import si.zitnik.research.interestmining.writer.CSVWriter
@@ -29,15 +29,15 @@ class PostsParser(filename: String) {
        if (line != null && line.toString().contains("<row")) {
          val row = XML.loadString(line)
            val post = Post(
-             (row \ "@Id").text.toInt,
+             (row \ "@Id").text,
              (row \ "@PostTypeId").text.toInt,
-             if ((row \ "@ParentId").text.isEmpty) {-1} else {(row \ "@ParentId").text.toInt},
-             if ((row \ "@AcceptedAnswerId").text.isEmpty) {-1} else {(row \ "@AcceptedAnswerId").text.toInt},
+             if ((row \ "@ParentId").text.isEmpty) {"-1"} else {(row \ "@ParentId").text},
+             if ((row \ "@AcceptedAnswerId").text.isEmpty) {"-1"} else {(row \ "@AcceptedAnswerId").text},
              (row \ "@CreationDate").text,
              (row \ "@Score").text.toInt,
              if ((row \ "@ViewCount").text.isEmpty) {-1} else {(row \ "@ViewCount").text.toInt},
              (row \ "@Body").text,
-             if ((row \ "@OwnerUserId").text.isEmpty) {-1} else {(row \ "@OwnerUserId").text.toInt},
+             if ((row \ "@OwnerUserId").text.isEmpty) {"-1"} else {(row \ "@OwnerUserId").text},
              (row \ "@Title").text,
              (row \ "@Tags").text,
              if ((row \ "@AnswerCount").text.isEmpty) {-1} else {(row \ "@AnswerCount").text.toInt},

@@ -1,6 +1,8 @@
 package si.zitnik.research.interestmining.writer.db
 
 import java.sql._
+import si.zitnik.research.interestmining.model.stackoverflow.User
+import org.json.JSONObject
 
 /**
  * Created with IntelliJ IDEA.
@@ -66,6 +68,49 @@ class DBWriter {
     }
     con.setAutoCommit(true)
     retVal
+  }
+
+  /**
+   * Return categories
+   * @param Id
+   * @return
+   */
+  def userExists(Id: String): String = {
+    val stmt = con.prepareStatement("SELECT categories FROM dbo.Users WHERE id LIKE ?")
+    stmt.setString(1, Id)
+
+    val rs = stmt.executeQuery()
+    if (rs.next()) {
+      return rs.getString(1)
+    } else {
+      return null
+    }
+  }
+
+
+  def insertOrUpdateCategory(user: User) {
+    val oldCategories = userExists(user.Id)
+    if (oldCategories != null) {
+      val jsonOldCategories = new JSONObject(oldCategories)
+      val jsonNewCategories = user.categories
+
+      val it = jsonNewCategories.keys()
+      while (it.hasNext) {
+        val key = it.next().toString
+        if (jsonOldCategories.has(key)) {
+          jsonOldCategories.put(key, jsonOldCategories.getInt(key) + jsonNewCategories.getInt(key))
+        } else {
+          jsonOldCategories.put(key, jsonNewCategories.get(key))
+        }
+      }
+
+      val stmt = con.prepareStatement("UPDATE dbo.Users SET categories = ? WHERE id LIKE ?")
+      stmt.setString(1, jsonOldCategories.toString())
+      stmt.setString(2, user.Id)
+      stmt.executeUpdate()
+    } else {
+      insert(user.toSql())
+    }
   }
 
   def delete(SQL: String) {

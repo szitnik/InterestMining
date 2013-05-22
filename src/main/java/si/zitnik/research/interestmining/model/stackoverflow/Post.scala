@@ -10,15 +10,15 @@ import si.zitnik.research.interestmining.writer.db.DBWriter
  * To change this template use File | Settings | File Templates.
  */
 case class Post(
-                   Id: Int,
-                   PostType: Int,
-                   ParentId: Int,
-                   AcceptedAnswerId: Int,
+                   Id: String,
+                   PostType: Int,    //1: Question, 2: Answer
+                   ParentId: String,
+                   AcceptedAnswerId: String,
                    CreationDate: String,
                    Score: Int,
                    ViewCount: Int,
                    Body: String,
-                   OwnerUserId: Int,
+                   OwnerUserId: String,
                    Title: String,
                    Tags: String,
                    AnswerCount: Int,
@@ -27,14 +27,14 @@ case class Post(
 
   def toSql() = {
     val stmt = DBWriter.instance().con.prepareStatement("INSERT INTO dbo.Posts VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)")
-    stmt.setString(1, Id.toString)
+    stmt.setString(1, Id)
     stmt.setInt(2, PostType)
-    stmt.setString(3, ParentId.toString)
-    stmt.setString(4, AcceptedAnswerId.toString)
+    stmt.setString(3, ParentId)
+    stmt.setString(4, AcceptedAnswerId)
     stmt.setInt(5, Score)
     stmt.setInt(6, ViewCount)
     stmt.setString(7, Body)
-    stmt.setString(8, OwnerUserId.toString)
+    stmt.setString(8, OwnerUserId)
     stmt.setString(9, Title)
     stmt.setString(10, Tags)
     stmt.setInt(11, AnswerCount)
