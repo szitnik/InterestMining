@@ -23,10 +23,13 @@ case class Post(
                    Tags: String,
                    AnswerCount: Int,
                    CommentCount: Int,
-                   FavoriteCount: Int) {
+                   FavoriteCount: Int,
+                   cat1: String,
+                   cat2: String,
+                   cat3: String) {
 
   def toSql() = {
-    val stmt = DBWriter.instance().con.prepareStatement("INSERT INTO dbo.Posts VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)")
+    val stmt = DBWriter.instance().con.prepareStatement("INSERT INTO Posts VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)")
     stmt.setString(1, Id)
     stmt.setInt(2, PostType)
     stmt.setString(3, ParentId)
@@ -40,6 +43,9 @@ case class Post(
     stmt.setInt(11, AnswerCount)
     stmt.setInt(12, CommentCount)
     stmt.setInt(13, FavoriteCount)
+    stmt.setString(14, cat1)
+    stmt.setString(15, cat2)
+    stmt.setString(16, cat3)
     stmt
 
     /*

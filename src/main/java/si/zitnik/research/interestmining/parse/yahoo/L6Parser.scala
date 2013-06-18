@@ -13,7 +13,6 @@ import si.zitnik.research.interestmining.model.stackoverflow.{User, Post}
  * To change this template use File | Settings | File Templates.
  */
 class L6Parser(filename: String) {
-  private val writer = DBWriter.instance()
 
   def readDocument(reader: BufferedReader): String = {
     var text = ""
@@ -61,7 +60,10 @@ class L6Parser(filename: String) {
         "",
         (xmlDoc \ "nbestanswers").size,
         0,
-        0
+        0,
+        (xmlDoc \ "cat").text,
+        (xmlDoc \ "maincat").text,
+        (xmlDoc \ "subcat").text
       )
 
       //best answer (id = question_id+"a", content, id of answerer)
@@ -79,20 +81,27 @@ class L6Parser(filename: String) {
         "",
         0,
         0,
-        0
+        0,
+        (xmlDoc \ "cat").text,
+        (xmlDoc \ "maincat").text,
+        (xmlDoc \ "subcat").text
       )
 
       //categories: cat, maincat, subcat
       val questioneer = new User((xmlDoc \ "id").text)
-      questioneer.categories.put((xmlDoc \ "maincat").text,1)
+      questioneer.categories1.put((xmlDoc \ "cat").text,1)
+      questioneer.categories2.put((xmlDoc \ "maincat").text,1)
+      questioneer.categories3.put((xmlDoc \ "subcat").text,1)
 
       val answerer = new User((xmlDoc \ "best_id").text)
-      answerer.categories.put((xmlDoc \ "maincat").text,1)
+      answerer.categories1.put((xmlDoc \ "cat").text,1)
+      answerer.categories2.put((xmlDoc \ "maincat").text,1)
+      answerer.categories3.put((xmlDoc \ "subcat").text,1)
 
-      writer.insert(question.toSql())
-      writer.insert(answer.toSql())
-      writer.insertOrUpdateCategory(questioneer)
-      writer.insertOrUpdateCategory(answerer)
+      DBWriter.instance().insert(question.toSql())
+      DBWriter.instance().insert(answer.toSql())
+      DBWriter.instance().insertOrUpdateCategory(questioneer)
+      DBWriter.instance().insertOrUpdateCategory(answerer)
     }
 
 
@@ -108,7 +117,10 @@ class L6Parser(filename: String) {
       counter += 1
       if (counter % 100 == 0) {
         println(counter)
-        writer.commit()
+        DBWriter.instance().commit()
+      }
+      if (counter % 1000 == 0) {
+        DBWriter.reinit()
       }
       curText = readDocument(reader)
     }

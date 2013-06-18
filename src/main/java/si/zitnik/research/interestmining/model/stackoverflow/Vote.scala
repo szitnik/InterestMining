@@ -17,7 +17,7 @@ case class Vote(Id: Int,
                 BountyAmount: Option[Int]) {
 
   def toSql() = {
-    val stmt = DBWriter.instance().con.prepareStatement("INSERT INTO dbo.Evidence (userId ,keyword ,informationSourceId ,trust ,weight ,typeOfEvidence) VALUES (?,?,?,?,?,?)")
+    val stmt = DBWriter.instance().con.prepareStatement("INSERT INTO Evidence (userId ,keyword ,informationSourceId ,trust ,weight ,typeOfEvidence) VALUES (?,?,?,?,?,?)")
     UserId match {
       case Some(x) => stmt.setString(1, x.toString)
       case None => stmt.setString(1, "-1")

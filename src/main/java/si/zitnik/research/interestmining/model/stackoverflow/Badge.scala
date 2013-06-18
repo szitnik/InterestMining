@@ -16,7 +16,7 @@ case class Badge(
                   Date: String) {
 
   def toSql() = {
-    val stmt = DBWriter.instance().con.prepareStatement("INSERT INTO dbo.Evidence (userId ,keyword ,informationSourceId ,trust ,weight ,typeOfEvidence) VALUES (?,?,?,?,?,?)")
+    val stmt = DBWriter.instance().con.prepareStatement("INSERT INTO Evidence (userId ,keyword ,informationSourceId ,trust ,weight ,typeOfEvidence) VALUES (?,?,?,?,?,?)")
     stmt.setString(1, UserId.toString)
     stmt.setString(2, Name)
     stmt.setString(3, "BadgesParser")

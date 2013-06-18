@@ -18,7 +18,7 @@ case class Comment(
                   UserId: Int) {
 
   def toSql() = {
-    val stmt = DBWriter.instance().con.prepareStatement("INSERT INTO dbo.Evidence (userId ,keyword ,informationSourceId ,trust ,weight ,typeOfEvidence) VALUES (?,?,?,?,?,?)")
+    val stmt = DBWriter.instance().con.prepareStatement("INSERT INTO Evidence (userId ,keyword ,informationSourceId ,trust ,weight ,typeOfEvidence) VALUES (?,?,?,?,?,?)")
     stmt.setString(1, UserId.toString)
     stmt.setString(2, Text)
     stmt.setString(3, "CommentParser")

@@ -28,7 +28,7 @@ class PostsParser(filename: String) {
        line = reader.readLine()
        if (line != null && line.toString().contains("<row")) {
          val row = XML.loadString(line)
-           val post = Post(
+           val post = Post (
              (row \ "@Id").text,
              (row \ "@PostTypeId").text.toInt,
              if ((row \ "@ParentId").text.isEmpty) {"-1"} else {(row \ "@ParentId").text},
@@ -42,7 +42,8 @@ class PostsParser(filename: String) {
              (row \ "@Tags").text,
              if ((row \ "@AnswerCount").text.isEmpty) {-1} else {(row \ "@AnswerCount").text.toInt},
              if ((row \ "@CommentCount").text.isEmpty) {-1} else {(row \ "@CommentCount").text.toInt},
-             if ((row \ "@FavoriteCount").text.isEmpty) {-1} else {(row \ "@FavoriteCount").text.toInt}
+             if ((row \ "@FavoriteCount").text.isEmpty) {-1} else {(row \ "@FavoriteCount").text.toInt},
+             "", "", ""
            )
            writer.insert(post.toSql())
          counter += 1

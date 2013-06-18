@@ -2,7 +2,7 @@ package si.zitnik.research.interestmining.model.stackoverflow
 
 import si.zitnik.research.interestmining.writer.db.DBWriter
 import collection.immutable.HashMap
-import org.json.JSONObject
+import si.zitnik.research.interestmining.util.json.JSONObject
 
 /**
  * Created with IntelliJ IDEA.
@@ -26,16 +26,20 @@ case class User(Id: String,
                 DownVotes: Int = 0) {
 
   //x:0.3;ffff:0.98;fff:0.7
-  var categories = new JSONObject()
+  var categories1 = new JSONObject()
+  var categories2 = new JSONObject()
+  var categories3 = new JSONObject()
 
   def toSql() = {
-    val stmt = DBWriter.instance().con.prepareStatement("INSERT INTO dbo.Users VALUES (?, ?, ?, ?, ?, ?)")
+    val stmt = DBWriter.instance().con.prepareStatement("INSERT INTO Users VALUES (?, ?, ?, ?, ?, ?, ?, ?)")
     stmt.setString(1, Id)
-    stmt.setString(2, categories.toString())
-    stmt.setString(3, Reputation.toString)
-    stmt.setString(4, Views.toString)
-    stmt.setString(5, UpVotes.toString)
-    stmt.setString(6, DownVotes.toString)
+    stmt.setString(2, categories1.toString())
+    stmt.setString(3, categories2.toString())
+    stmt.setString(4, categories3.toString())
+    stmt.setString(5, Reputation.toString)
+    stmt.setString(6, Views.toString)
+    stmt.setString(7, UpVotes.toString)
+    stmt.setString(8, DownVotes.toString)
     stmt
 
     /*
