@@ -4,6 +4,7 @@ import java.sql._
 import si.zitnik.research.interestmining.model.stackoverflow.User
 import si.zitnik.research.interestmining.util.json.JSONObject
 import com.typesafe.scalalogging.slf4j.Logging
+import si.zitnik.research.interestmining.phases.SemSimResult
 
 /**
  * Created with IntelliJ IDEA.
@@ -13,6 +14,8 @@ import com.typesafe.scalalogging.slf4j.Logging
  * To change this template use File | Settings | File Templates.
  */
 class DBWriter(val dbName: String) extends Logging {
+
+
   val connectionUrl = "jdbc:mysql://localhost:3306/" + dbName + "?user=slavkoz&password=xs"
   val con = DriverManager.getConnection(connectionUrl)
 
@@ -49,13 +52,8 @@ class DBWriter(val dbName: String) extends Logging {
       savePoint = con.setSavepoint()
       insert(stms)
 
-      val rs = con.prepareStatement("SELECT  ident_current('Evidence')").executeQuery()
-      rs.next()
-      val evidenceId = rs.getInt(1)
-
-      val stms1 = con.prepareStatement("INSERT INTO EvidencePost VALUES (?, ?)")
-      stms1.setInt(1, evidenceId)
-      stms1.setString(2, postId)
+      val stms1 = con.prepareStatement("INSERT INTO EvidencePost VALUES (LAST_INSERT_ID(), ?)")
+      stms1.setString(1, postId)
       insert(stms1)
     } catch {
       case e: Exception => if (e.getMessage.contains("FOREIGN KEY constraint")) {
@@ -69,6 +67,19 @@ class DBWriter(val dbName: String) extends Logging {
     con.setAutoCommit(true)
     retVal
   }
+
+  def insertEvidence(userId: String, keyword: String, informationSourceId: String, trust: String, weight: Double, typeOfEvidence: String, postId: String) {
+    val stmt = DBWriter.instance().con.prepareStatement("INSERT INTO Evidence (userId,keyword,informationSourceId,trust,weight,typeOfEvidence) VALUES (?,?,?,?,?,?);")
+    stmt.setString(1, userId)
+    stmt.setString(2, keyword)
+    stmt.setString(3, informationSourceId)
+    stmt.setString(4, trust)
+    stmt.setDouble(5, weight)
+    stmt.setString(6, typeOfEvidence)
+    insertEvidence(stmt, postId)
+  }
+
+
 
   def updateWordToDocFreqs(words: Set[String]) {
     con.setAutoCommit(false)
@@ -96,8 +107,42 @@ class DBWriter(val dbName: String) extends Logging {
     con.setAutoCommit(true)
   }
 
+  def updateWordToDocFreqsTitle(words: Set[String]) {
+    con.setAutoCommit(false)
+
+
+    var savePoint: Savepoint = null
+    try {
+      savePoint = con.setSavepoint()
+
+      for (word <- words) {
+        val stms1 = con.prepareStatement("INSERT INTO wordToDocFreqTitle(word,counts) VALUES (?,1) ON DUPLICATE KEY UPDATE counts=counts+1;")
+        stms1.setString(1, word)
+        insert(stms1)
+      }
+
+      con.commit()
+    } catch {
+      case e: Exception => {
+        con.rollback(savePoint)
+        println(words.mkString("\n"))
+        e.printStackTrace()
+        System.exit(-1)
+      }
+    }
+    con.setAutoCommit(true)
+  }
+
   def insertIntoSemSim(questionId: String, allWords: Int, termFreqs: String) {
     val stms1 = con.prepareStatement("INSERT INTO semSim(questionId,allWords, termFreqs) VALUES (?,?,?);")
+    stms1.setString(1, questionId)
+    stms1.setInt(2, allWords)
+    stms1.setString(3, termFreqs)
+    insert(stms1)
+  }
+
+  def insertIntoSemSimTitle(questionId: String, allWords: Int, termFreqs: String) {
+    val stms1 = con.prepareStatement("INSERT INTO semSimTitle(questionId,allWords, termFreqs) VALUES (?,?,?);")
     stms1.setString(1, questionId)
     stms1.setInt(2, allWords)
     stms1.setString(3, termFreqs)
@@ -159,7 +204,14 @@ class DBWriter(val dbName: String) extends Logging {
   }
 
   def getAllQuestionIds(start: Int, end: Int) = {
-    val stmt = con.prepareStatement("SELECT id, body FROM Posts WHERE postTypeId = 1 ORDER BY id LIMIT ?, ?;")
+    val stmt = con.prepareStatement("SELECT id, body, ownerUserId, cat1, cat2, cat3 FROM Posts WHERE postTypeId = 1 ORDER BY id LIMIT ?, ?;")
+    stmt.setInt(1, start)
+    stmt.setInt(2, end)
+    stmt.executeQuery()
+  }
+
+  def getAllPostsIds(start: Int, end: Int) = {
+    val stmt = con.prepareStatement("SELECT id, body, ownerUserId, cat1, cat2, cat3, postTypeId, title FROM Posts ORDER BY id LIMIT ?, ?;")
     stmt.setInt(1, start)
     stmt.setInt(2, end)
     stmt.executeQuery()
@@ -167,6 +219,45 @@ class DBWriter(val dbName: String) extends Logging {
 
   def getAllQuestionIdsNum() = {
     val stmt = con.prepareStatement("SELECT COUNT(*) FROM Posts WHERE postTypeId = 1;")
+    val rs = stmt.executeQuery()
+    rs.next()
+    rs.getInt(1)
+  }
+
+  def getAllPostsIdsNum() = {
+    val stmt = con.prepareStatement("SELECT COUNT(*) FROM Posts;")
+    val rs = stmt.executeQuery()
+    rs.next()
+    rs.getInt(1)
+  }
+
+  def getSemSimRecord(questionId: String) = {
+    val stmt = con.prepareStatement("SELECT * FROM semSim WHERE questionId = ?;")
+    stmt.setString(1, questionId)
+    val rs = stmt.executeQuery()
+    rs.next()
+    SemSimResult(rs.getString(1), rs.getInt(2), new JSONObject(rs.getString(3)))
+  }
+
+  def getSemSimRecordTitle(questionId: String) = {
+    val stmt = con.prepareStatement("SELECT * FROM semSimTitle WHERE questionId = ?;")
+    stmt.setString(1, questionId)
+    val rs = stmt.executeQuery()
+    rs.next()
+    SemSimResult(rs.getString(1), rs.getInt(2), new JSONObject(rs.getString(3)))
+  }
+
+  def getWordToDocumentFrequency(word: String) = {
+    val stmt = con.prepareStatement("SELECT counts FROM wordToDocFreq WHERE word = ?;")
+    stmt.setString(1, word)
+    val rs = stmt.executeQuery()
+    rs.next()
+    rs.getInt(1)
+  }
+
+  def getWordToDocumentFrequencyTitle(word: String) = {
+    val stmt = con.prepareStatement("SELECT counts FROM wordToDocFreqTitle WHERE word = ?;")
+    stmt.setString(1, word)
     val rs = stmt.executeQuery()
     rs.next()
     rs.getInt(1)

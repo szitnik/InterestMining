@@ -14,8 +14,9 @@ import tokenizer.Tokenizer
 object AIOProcessor {
   def process(text: String) = {
     Tokenizer.tokenizer.tokenize(text).
+      filter(v => v.toCharArray.filter(!_.isLetter).size == 0).
       filter(!Stopwords.stopwords.contains(_)).
-      map(Lemmatizer.lm.Lemmatize(_)).
+      map(v => Lemmatizer.lm.Lemmatize(v.toLowerCase)).
       filter(v => v.size > 1 && v.size <= 50).
       toBuffer
   }

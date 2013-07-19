@@ -4,6 +4,7 @@ import si.zitnik.research.interestmining.writer.db.DBWriter
 import java.io.{FileReader, BufferedReader}
 import xml.XML
 import si.zitnik.research.interestmining.model.stackoverflow.{User, Post}
+import com.typesafe.scalalogging.slf4j.Logging
 
 /**
  * Created with IntelliJ IDEA.
@@ -12,7 +13,7 @@ import si.zitnik.research.interestmining.model.stackoverflow.{User, Post}
  * Time: 6:05 PM
  * To change this template use File | Settings | File Templates.
  */
-class L6Parser(filename: String) {
+class L6Parser(filename: String) extends Logging {
 
   def readDocument(reader: BufferedReader): String = {
     var text = ""
@@ -40,11 +41,13 @@ class L6Parser(filename: String) {
     text
   }
 
-  def parseDocument(document: String) {
+  def parseDocument(document: String) = {
     val xmlDoc = XML.loadString(document.toString) \\ "document"
+    var retVal = 0
 
     //only if qlang == "en"
-    if ((xmlDoc \ "qlang").text.equals("en")) {
+    if ((xmlDoc \ "qlang").text.equals("en") && ((xmlDoc \ "nbestanswers") \ "answer_item").size > 5) {
+      retVal = 1
       //question (id, subject, content, answercount, id of user having question)
       val question = new Post(
         (xmlDoc \ "uri").text,
@@ -58,7 +61,7 @@ class L6Parser(filename: String) {
         (xmlDoc \ "id").text,
         (xmlDoc \ "subject").text,
         "",
-        (xmlDoc \ "nbestanswers").size,
+        ((xmlDoc \ "nbestanswers") \ "answer_item").size,
         0,
         0,
         (xmlDoc \ "cat").text,
@@ -102,24 +105,47 @@ class L6Parser(filename: String) {
       DBWriter.instance().insert(answer.toSql())
       DBWriter.instance().insertOrUpdateCategory(questioneer)
       DBWriter.instance().insertOrUpdateCategory(answerer)
+
+      //process other answers
+      for (answerNode <- ((xmlDoc \ "nbestanswers") \ "answer_item").zipWithIndex) {
+        val answerOther = new Post(
+          (xmlDoc \ "uri").text+"a"+answerNode._2,
+          2,
+          (xmlDoc \ "uri").text,
+          "",
+          "",
+          0,
+          0,
+          answerNode._1.text,
+          "",
+          "",
+          "",
+          0,
+          0,
+          0,
+          (xmlDoc \ "cat").text,
+          (xmlDoc \ "maincat").text,
+          (xmlDoc \ "subcat").text
+        )
+        DBWriter.instance().insert(answerOther.toSql())
+      }
     }
 
-
+    retVal
   }
 
   def parse(maxToParse: Int = Int.MaxValue) {
     val reader = new BufferedReader(new FileReader(filename))
-    var counter = 0
+    var questionCounter = 0
+    var parsedCounter = 0
 
     var  curText = readDocument(reader)
-    while (curText != null && counter < maxToParse) {
-      parseDocument(curText)
-      counter += 1
-      if (counter % 100 == 0) {
-        println(counter)
+    while (curText != null && questionCounter < maxToParse) {
+      parsedCounter += parseDocument(curText)
+      questionCounter += 1
+      if (questionCounter % 1000 == 0) {
+        logger.info("Parsed: %d, Inserted to db: %d".format(questionCounter, parsedCounter))
         DBWriter.instance().commit()
-      }
-      if (counter % 1000 == 0) {
         DBWriter.reinit()
       }
       curText = readDocument(reader)

@@ -44,12 +44,11 @@ class TFIDF(documents: ArrayBuffer[ArrayBuffer[String]]) {
   }
   */
 
-  def calculateTFIDFWeights(document: ArrayBuffer[String]): ArrayBuffer[Double] = {
+  def calculateTFIDFWeights(words: ArrayBuffer[String]): ArrayBuffer[Double] = {
     val retVal = ArrayBuffer[Double]()
 
-    val words = document
 
-    if (words.size != 0 && !document.mkString("").trim.isEmpty) {
+    if (words.size != 0 && !words.mkString("").trim.isEmpty) {
       val counts = words.groupBy(x=>x).mapValues(x=>x.length)
       val maxWordCountInDoc = counts.values.max
 
@@ -62,4 +61,14 @@ class TFIDF(documents: ArrayBuffer[ArrayBuffer[String]]) {
 
     retVal
   }
+}
+
+object TFIDF {
+
+  def calculateTFIDF(wordCount: Double, allWordsinDocNum: Double, numberOfDocuments: Double, wordToDocumentFrequency: Double) = {
+    val tf = wordCount/allWordsinDocNum
+    val idf = math.log(numberOfDocuments/wordToDocumentFrequency)
+    tf*idf
+  }
+
 }

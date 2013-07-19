@@ -1,13 +1,14 @@
 package si.zitnik.research.interestmining
 
 import parse._
-import phases.Phase2
+import phases.{Phase3, Phase2}
 import textprocessors.lemmatizer.Lemmatizer
 import stackoverflow._
 import writer.db.DBWriter
 import yahoo.L6Parser
 import collection.mutable.ArrayBuffer
 import java.sql.DriverManager
+import com.typesafe.scalalogging.slf4j.Logging
 
 /**
  * Created with IntelliJ IDEA.
@@ -16,7 +17,7 @@ import java.sql.DriverManager
  * Time: 9:24 PM
  * To change this template use File | Settings | File Templates.
  */
-object TransformRunner {
+object TransformRunner extends Logging {
 
   def stackoveflow() {
     DBWriter.create("interestmining")
@@ -65,27 +66,33 @@ object TransformRunner {
 
   def yahooL6() {
     //val filename = "/Users/slavkoz/Documents/DR_Research/Datasets/Webscope_L6/Webscope_L6/FullOct2007.xml"
-    val filename = "/Users/slavkoz/Documents/DR_Research/Datasets/Webscope_L6/Webscope_L6/splitted/split_aa"
-    DBWriter.create("interestminingL6100m")
-    val maxToParse = 10000
+    //val filename = "/Users/slavkoz/Documents/DR_Research/Datasets/Webscope_L6/Webscope_L6/small_sample.xml"
+    //val filename = "/Users/slavkoz/Documents/DR_Research/Datasets/Webscope_L6/Webscope_L6/splitted/split_aa"
+    DBWriter.create("interestminingL61k")
+    val maxToParse = Int.MaxValue
 
 
-    println("Doing ...")
+    //PHASE 1: Data import
+    /*logger.info("Phase 1:")
     DBWriter.instance().delete("DELETE FROM Users")
     DBWriter.instance().delete("DELETE FROM Posts")
-    new L6Parser(filename).parse(maxToParse)
+    new L6Parser(filename).parse(maxToParse)*/
 
 
-    //PHASE 2: TFIDF/text processing
+    //PHASE 2: TFIDF/text preprocessing
+    logger.info("Phase 2:")
     DBWriter.instance().delete("DELETE FROM semSim")
     DBWriter.instance().delete("DELETE FROM wordToDocFreq")
+    DBWriter.instance().delete("DELETE FROM semSimTitle")
+    DBWriter.instance().delete("DELETE FROM wordToDocFreqTitle")
     Phase2.process(false)
 
-    /*
-    //Evidences are continuously added
-    DBWriter.instance().delete("DELETE FROM EvidencePost")
-    DBWriter.instance().delete("DELETE FROM Evidence")
-     */
+    //PHASE 3: Evidence generation
+    logger.info("Phase 3:")
+    //DBWriter.instance().delete("DELETE FROM EvidencePost")
+    //DBWriter.instance().delete("DELETE FROM Evidence")
+    Phase3.process()
+
 
     DBWriter.instance().close()
   }

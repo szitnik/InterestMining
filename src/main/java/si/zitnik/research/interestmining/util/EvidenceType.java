@@ -8,4 +8,7 @@ package si.zitnik.research.interestmining.util;
  * To change this template use File | Settings | File Templates.
  */
 public enum EvidenceType {
+    QUESTION,
+    ANSWER,
+    THREAD
 }

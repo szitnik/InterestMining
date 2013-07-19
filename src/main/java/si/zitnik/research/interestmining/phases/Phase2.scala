@@ -22,26 +22,28 @@ object Phase2 extends Logging {
 
     //stackoverflow: 2012348
     //val end = 2012348
-    val end = DBWriter.instance().getAllQuestionIdsNum()
+    val end = DBWriter.instance().getAllPostsIdsNum()
 
     logger.info("All questions: %d".format(end))
 
     while (start <= end) {
       logger.info("Processed: %d/%d".format(start, end))
-      val resultSet = DBWriter.instance().getAllQuestionIds(start, batchSize)
+      val resultSet = DBWriter.instance().getAllPostsIds(start, batchSize)
       while (resultSet.next()) {
-        var questionId = resultSet.getString(1)
-        var questionBody = resultSet.getString(2)
+        var postId = resultSet.getString(1)
+        var postBody = resultSet.getString(2)
+        var postTitle = resultSet.getString("title")
 
-
-        //1. get question and all answers, extract only text
-        var questionThreadText = questionBody + " " +DBWriter.instance().getThreadTextByQuestionId(questionId)
+        //DO FOR BODY
+        //1. get post
+        var text = postBody.toLowerCase
         if (html) {
-          questionThreadText = Jsoup.parse(questionThreadText.toLowerCase).getElementsByTag("p").map(_.text()).mkString(" ")
+          text = Jsoup.parse(text).getElementsByTag("p").map(_.text()).mkString(" ")
         }
 
-        //2. tokenize, remove stopwords, lemmatize
-        val processedWords = AIOProcessor.process(questionThreadText)
+
+        //2. tokenize, remove stopwords, lemmatize, tolower
+        val processedWords = AIOProcessor.process(text)
 
         //3. insert/update wordToDocFreq
         val wordsSet = processedWords.toSet
@@ -53,7 +55,27 @@ object Phase2 extends Logging {
         wordsSet.foreach(word => {
           tfs.put(word, counts(word))
         })
-        DBWriter.instance().insertIntoSemSim(questionId, processedWords.size, tfs.toString)
+        DBWriter.instance().insertIntoSemSim(postId, processedWords.size, tfs.toString)
+
+
+        //DO FOR TITLE
+        //1. get post
+        var title = postTitle
+
+        //2. tokenize, remove stopwords, lemmatize, tolower
+        val processedWordsTitle = AIOProcessor.process(title)
+
+        //3. insert/update wordToDocFreq
+        val wordsSetTitle = processedWordsTitle.toSet
+        DBWriter.instance().updateWordToDocFreqsTitle(wordsSetTitle)
+
+        //4. insert tf (SemSim table)
+        val countsTitle = processedWordsTitle.groupBy(x=>x).mapValues(x=>x.length)
+        val tfsTitle = new JSONObject()
+        wordsSetTitle.foreach(word => {
+          tfsTitle.put(word, countsTitle(word))
+        })
+        DBWriter.instance().insertIntoSemSimTitle(postId, processedWordsTitle.size, tfsTitle.toString)
       }
 
       start += batchSize
