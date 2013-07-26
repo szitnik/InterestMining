@@ -54,22 +54,18 @@ object CopyDataBetweenDBs extends Logging {
   }
 
   def copyFromMySQLToMSSQLForConceptExtraction() {
-    val connectionUrlMySQL = "jdbc:mysql://localhost:3306/?user=slavkoz&password=xs"
+    val connectionUrlMySQL = "jdbc:mysql://localhost:3306/interestminingl6type2?user=slavkoz&password=xs"
     val conMySQL = DriverManager.getConnection(connectionUrlMySQL)
 
     val connectionUrlMSSQL = "jdbc:sqlserver://192.168.7.65\\SQLEXPRESS:1433;databaseName=Concept_Extraction;user=sa;password=xs;";
     Class.forName("com.microsoft.sqlserver.jdbc.SQLServerDriver")
     val conMSSQL = DriverManager.getConnection(connectionUrlMSSQL)
 
-
-    val stmt = conMySQL.prepareStatement("SELECT id, CONCAT(title, ' ', body) as txt FROM interestminingL61k.Posts ORDER BY id ASC;")
+    val stmt = conMySQL.prepareStatement("SELECT id, CONCAT(title, ' ', body) as txt FROM Posts WHERE postTypeId=1 ORDER BY id ASC;")
     val rs = stmt.executeQuery()
 
-
-
-
     while (rs.next()) {
-      val stmt1 = conMSSQL.prepareStatement("INSERT INTO dbo.Questions (text, wordCount, source) VALUES (?, ?, 'L6')")
+      val stmt1 = conMSSQL.prepareStatement("INSERT INTO dbo.Questions (text, wordCount, source) VALUES (?, ?, 'Sample')")
       logger.info("%s - %s".format(rs.getString(1), rs.getString(2)))
       stmt1.setString(1, rs.getString(2))
       stmt1.setInt(2, rs.getString(2).split(" ").size)
@@ -134,7 +130,7 @@ object CopyDataBetweenDBs extends Logging {
 
   def main(args: Array[String]) {
     //fileFromFullL6To1kL6()
-    //copyFromMySQLToMSSQLForConceptExtraction()
+    copyFromMySQLToMSSQLForConceptExtraction()
     //copyFromMSSQLMySQLForConceptExtraction()
   }
 }

@@ -68,7 +68,8 @@ object TransformRunner extends Logging {
     //val filename = "/Users/slavkoz/Documents/DR_Research/Datasets/Webscope_L6/Webscope_L6/FullOct2007.xml"
     //val filename = "/Users/slavkoz/Documents/DR_Research/Datasets/Webscope_L6/Webscope_L6/small_sample.xml"
     //val filename = "/Users/slavkoz/Documents/DR_Research/Datasets/Webscope_L6/Webscope_L6/splitted/split_aa"
-    DBWriter.create("interestminingL61k")
+    println("TypeAll")
+    DBWriter.create("interestminingl6typeall")
     val maxToParse = Int.MaxValue
 
 

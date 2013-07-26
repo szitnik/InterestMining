@@ -1,0 +1,57 @@
+----------------------------
+SemNet V2.2 (SQLite version)
+----------------------------
+
+- Download
+	http://www.bizware.tu-berlin.de/semnet/
+
+- Install
+	- Uncompress
+	- Use an SQLite client (http://www.sqlite.org/download.html) to access
+	  the data. The database has been created using the SQLite JDBC driver 3.7.2.
+
+- Schema
+	#  words(id INTEGER PRIMARY KEY, text TEXT, frequency INTEGER);
+		- table "words" is the vocabulary of single word tokens
+		- id: identifier of the vocabulary word
+		- text: string of the vocabulary word
+		- frequency: unigram frequency of the word
+	# nouncooccurrences(termw1 INTEGER, termw2 INTEGER, termw3 INTEGER, relw1 INTEGER, relw2 INTEGER, relw3 INTEGER, relfreq REAL)
+		- table "nouncooccurrences" contains the semantic graph. Each edge in
+		  the graph is one row in the table. All 6 integer values are foreign
+		  key relationships to the "words" table
+		- termw1: first word of the term
+		- termw2: second word of the term or null
+		- termw3: third word of the term or null
+		- relw1: first word of the related term
+		- relw2: second word of the related term or null
+		- relw3: third word of the related term or null
+		- relfreq: relative frequency (co-occurrence probability)
+
+- Example content of the words table:
+	 id		| text		| frequency
+	-----------------------------
+	5824331	|doctor		|19086489
+	2317507	|nurse		|10379228
+	8347206	|software	|13762895
+	2331471	|engineering|11302446
+
+- Example content of the nouncooccurrences table:
+	termw1 |termw2	| termw3| relw1	| relw2	| relw3	| relfreq
+	-------------------------------------------------------------------
+	5824331|		|		|2317507|		|		|0.0675175786018372		[doctor->nurse]
+	5824331|		|		|5117364|		|		|0.0590829141438007		[doctor->lawyer]
+	5824331|		|		|507149|		|		|0.0478358305990696		[doctor->degree]
+	5824331|		|		|5955458|		|		|0.0274617038667202		[doctor->office]
+	8347206|2331471 |		|1428157|		|		|0.126001462340355		[software engineering->CASE]
+
+- Example queries on the database:
+	# Retrieve ID for a word
+		- select id from words where text = 'doctor';
+	# Retrieve word for an word ID
+		- select text from words where id = 5824331;
+	# Retrieve first 20 rows of related term ids for a single word term ordered by descending probability
+		select * from nouncooccurrences where termw1 = 5824331 and termw2 is null and termw3 is null order by relfreq desc limit 20;
+	# Retrieve the 50 most related string terms with probability for a single word term ordered by descending probability
+		select w1.text,w2.text,w3.text,relfreq from nouncooccurrences left join words as w1 on relw1 = w1.id left join words as w2 on relw2 = w2.id left join words as w3 on relw3 = w3.id where termw1 = 5824331 and termw2 is null and termw3 is null order by relfreq desc limit 50;
+
