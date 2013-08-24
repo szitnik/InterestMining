@@ -77,6 +77,7 @@ object CopyDataBetweenDBs extends Logging {
   def copyFromMSSQLMySQLForConceptExtraction() {
     val connectionUrlMySQL = "jdbc:mysql://localhost:3306/?user=slavkoz&password=xs"
     val conMySQL = DriverManager.getConnection(connectionUrlMySQL)
+    val mySQLDb = "interestminingl6typeall"
 
     val connectionUrlMSSQL = "jdbc:sqlserver://192.168.7.65\\SQLEXPRESS:1433;databaseName=Concept_Extraction;user=sa;password=xs;";
     Class.forName("com.microsoft.sqlserver.jdbc.SQLServerDriver")
@@ -86,27 +87,31 @@ object CopyDataBetweenDBs extends Logging {
 
     //map indexes
     val realQuestionIndexes = ArrayBuffer[Int]()
-    val stmt = conMySQL.prepareStatement("SELECT id FROM interestminingL61k.Posts ORDER BY id DESC;")
+    val stmt = conMySQL.prepareStatement("SELECT id FROM "+mySQLDb+".Posts WHERE postTypeId = 1 ORDER BY id DESC;")
     val rs = stmt.executeQuery()
     while (rs.next()) {
       realQuestionIndexes += rs.getString(1).toInt
     }
 
     val copiedQuestionIndexes = ArrayBuffer[Int]()
-    val stmt1 = conMSSQL.prepareStatement("SELECT idQuestion FROM dbo.Questions ORDER BY idQuestion DESC;")
+    val stmt1 = conMSSQL.prepareStatement("SELECT idQuestion FROM dbo.Questions WHERE source = 'L6-typeALL-Questions' ORDER BY idQuestion DESC;")
     val rs1 = stmt1.executeQuery()
     while (rs1.next()) {
       copiedQuestionIndexes += rs1.getInt(1)
     }
 
+    if (realQuestionIndexes.size != copiedQuestionIndexes.size) {
+      throw new Exception("Indexes do not match! Real: %d, Copied: %d".format(realQuestionIndexes.size, copiedQuestionIndexes.size))
+    }
+
     //transfer
-    val stmt2 = conMSSQL.prepareStatement("SELECT * FROM dbo.Concepts;")
+    val stmt2 = conMSSQL.prepareStatement("SELECT * FROM dbo.Concepts WHERE engine LIKE 'ConceptExtractor-L6-typeAll-Questions';")
     val rs2 = stmt2.executeQuery()
 
-    DBWriter.create("interestminingL61k")
+    DBWriter.create(mySQLDb)
     while (rs2.next()) {
       val postId = realQuestionIndexes(copiedQuestionIndexes.indexOf(rs2.getInt("idQuestion")))+""
-      val stmt3 = conMySQL.prepareStatement("SELECT ownerUserId FROM interestminingL61k.Posts WHERE id = ?;")
+      val stmt3 = conMySQL.prepareStatement("SELECT ownerUserId FROM " + mySQLDb + ".Posts WHERE id = ?;")
       stmt3.setString(1, postId)
       val rs3 = stmt3.executeQuery()
       rs3.next()
@@ -130,7 +135,7 @@ object CopyDataBetweenDBs extends Logging {
 
   def main(args: Array[String]) {
     //fileFromFullL6To1kL6()
-    copyFromMySQLToMSSQLForConceptExtraction()
-    //copyFromMSSQLMySQLForConceptExtraction()
+    //copyFromMySQLToMSSQLForConceptExtraction()
+    copyFromMSSQLMySQLForConceptExtraction()
   }
 }

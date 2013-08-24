@@ -1,0 +1,56 @@
+Povezava do baze:
+mysql -u interestmining -p -h octonion < interestmining_Dump20130627.sql
+
+Zamenjava stringov:
+perl -pi -w -e 's/interestminingl6100m/interestminingL6100m/g;' interestmining_Dump20130627.sql
+
+
+Query:
+SELECT * FROM (SELECT u.id AS userId, COUNT(p.id) AS questionCount, group_concat(p.id) AS questionList FROM interestminingL6.Posts p, interestminingL6.Users u WHERE p.postTypeId = 1 AND p.answerCount >= 5 AND p.answerCount <= 20 AND u.id = p.ownerUserId AND u.id != '' GROUP BY u.id ORDER BY COUNT(p.id) DESC) AS h WHERE h.questionCount <= 20 AND h.questionCount >= 5 LIMIT 0, 1000 INTO OUTFILE '/tmp/L61k.txt';
+Query OK, 1000 rows affected, 218 warnings (6 hours 41 min 22.08 sec)
+
+
+Normalize tfidf:
+SELECT MIN(weight), MAX(weight)
+FROM Evidence
+WHERE informationSourceId = 'TFIDF';
+
+UPDATE Evidence SET weight = (weight-0.074535071849823)/(0.35325193405151367-0.074535071849823) WHERE informationSourceId = 'TFIDF';
+
+train/test distr:
+SELECT DISTINCT(cat2), COUNT(id)
+FROM Posts
+WHERE
+	postTypeId = 1 AND
+	train = 1
+GROUP BY cat2
+ORDER BY COUNT(id) DESC;
+
+SELECT id 
+FROM Posts
+WHERE
+	postTypeId = 1 AND
+	cat2 = 'Society & Culture';
+
+UPDATE Posts SET train = 1 WHERE id = '100641';
+
+SELECT * FROM Posts WHERE id = '100641';
+
+SELECT a.cat, a.train, b.test
+FROM
+(SELECT DISTINCT(cat2) AS cat, COUNT(id) AS train
+FROM Posts
+WHERE
+	postTypeId = 2 AND
+	train = 1
+GROUP BY cat2
+ORDER BY COUNT(id) DESC) a,
+(SELECT DISTINCT(cat2) AS cat, COUNT(id) AS test
+FROM Posts
+WHERE
+	postTypeId = 2 AND
+	train = 0
+GROUP BY cat2
+ORDER BY COUNT(id) DESC) b
+WHERE
+	a.cat = b.cat;

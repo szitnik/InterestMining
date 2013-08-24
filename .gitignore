@@ -1,4 +1,6 @@
 .idea
+dependency-reduced-pom.xml
+interestmining-logger.log
 InterestMining.iml
 target
 csv
