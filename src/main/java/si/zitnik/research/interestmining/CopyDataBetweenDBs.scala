@@ -75,7 +75,7 @@ object CopyDataBetweenDBs extends Logging {
   }
 
   def copyFromMSSQLMySQLForConceptExtraction() {
-    val connectionUrlMySQL = "jdbc:mysql://localhost:3306/?user=slavkoz&password=xs"
+    val connectionUrlMySQL = "jdbc:mysql://octonion:3306/?user=interestmining&password=6hGKsfpdC4aCXC75"
     val conMySQL = DriverManager.getConnection(connectionUrlMySQL)
     val mySQLDb = "interestminingl6typeall"
 

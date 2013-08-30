@@ -465,7 +465,7 @@ Email: marko.bajec@fri.uni-lj.si}
 
 \begin{abstract}
 %\boldmath
-Intelligent Question Routing Systems (IQRS) aim to serve as a knowledge exchange medium in an arbitrary field of expertise, where intensive communication between users is required (e.g., large enterprises, e-government agencies, technical support, health care system, army). Other applications can involve a support in educational and collaboration processes, where IQRS facilitates an efficient and effective knowledge exchange between scholars. The benefit coming from deployment of such systems includes: (a) reducing unnecessary “pinging” of experts, which are a valuable resource and (b) increasing the system owners' (enterprise, government, university) quality of service, since users are more satisfied with answers, because their questions are answered by the right persons. In this paper we investigate the role of semantic similarity for each stage of IQRS process. For auestion analysis we use semantic enrichment, more precisely semantic query expansion with ConceptNet, WordNet (Antelope), and SemNet. Also, for question routing stage we used techniques developed for semantic similarity between two paragraphs sentences.  Finally, for evaluation we used special subsets of Yahoo! L6 Answers dataset from which we extracted three different types of users:  (1) Top questioneers, (2) Top answerers, and (3) Top combination of previous user types to model interest and expertise. Over these users we build special semantic profiles and match them to questions, answers or the whole question threads, according to the specific IQRS stage.
+Intelligent Question Routing Systems (IQRS) aim to serve as a knowledge exchange medium in an arbitrary field of expertise, where intensive communication between users is required (e.g., large enterprises, e-government agencies, technical support, health care system, army). Other applications can involve a support in educational and collaboration processes, where IQRS facilitates an efficient and effective knowledge exchange between scholars. The benefit coming from deployment of such systems includes: (a) reducing unnecessary “pinging” of experts, which are a valuable resource and (b) increasing the system owners' (enterprise, government, university) quality of service, since users are more satisfied with answers, because their questions are answered by the right persons. In this paper we investigate the role of semantic similarity for each stage of IQRS process. For question analysis we use semantic enrichment, more precisely semantic query expansion with ConceptNet, WordNet (Antelope), and SemNet. Also, for question routing stage we used techniques developed for semantic similarity between two paragraphs sentences.  Finally, for evaluation we used special subsets of Yahoo! L6 Answers dataset from which we extracted three different types of users:  (1) Top questioneers, (2) Top answerers, and (3) Top combination of previous user types to model interest and expertise. Over these users we build special semantic profiles and match them to questions, answers or the whole question threads, according to the specific IQRS stage.
 \end{abstract}
 % IEEEtran.cls defaults to using nonbold math in the Abstract.
 % This preserves the distinction between vectors and scalars. However,
@@ -493,6 +493,8 @@ Intelligent Question Routing Systems (IQRS) aim to serve as a knowledge exchange
 
 \section{Introduction}
 % no \IEEEPARstart
+\TODO define that post can be answer or question
+
 This demo file is intended to serve as a ``starter file''
 for IEEE conference papers produced under \LaTeX\ using
 IEEEtran.cls version 1.7 and later.
@@ -595,92 +597,74 @@ I wish you the best of success.
 
 \section{Algorithm}
 	Max Sem sim
+	\TODO define what is evidence!
+	\TODO include link to the software repository
 	
 \section{UserProfiling}
+\TODO what is profiling, how we do profiling, what do we think of it ...
 
 \subsection{Sources}
-\TODO write about different sources. There are three types of sources: System (categories), Semantic (...), String (TFIDF). They are divided if extracted from Title or Body and can refer to Question, Answer or the whole thread.
+To build efficient user profiles, we collect a lot of evidences from user's posts. We separate evidences by source, which can origin from question body, answer body, question title, whole post thread or IQRS system. We further categorize evidences by their type, which can be one  the following:
 \begin{itemize}
-	\item Categories (Cat1, Cat2, Cat3)
-	\item ConceptExtraction
-	\item TFIDF
-	\item SemNet
+	\item {\bf ConceptNet}~\cite{bib:conceptnet} is a semantic knowledge base that describes general human knowledge. It includes words and common phrases from many written texts. They are related through open domain predicates and through common knowledge. The database was created manually and partially automatically from Wiktionary and ReVerb system, which is an open information extraction tool that extracts binary relationships of type {\it phrase-relation-phrase} in an unsupervised manner. The whole database contains 414 thousand English concepts and 903 thousand relationships between them.
+	\item {\bf Semantic Network of Terms} (SemNet)~\cite{bib:semnet} is a large-scale network of technical terminology which allows querying terms and retrieving ranked lists of their semantically related terms. The network was automatically constructed based on the noun terms from English Google Books Ngram Dataset using word co-occurrence analysis. The network consists of 2.8 million distinct single and multi-word terms and 37.5 million weighted edges between them. SemNet includes a large part of the same concepts and relationships from similar semantic knowledge bases such as WordNet~\cite{bib:wordnet} and ConceptNet~\cite{bib:conceptnet}. 
+	\item {\bf TF-IDF}, term frequency-inverse document frequency is a general numerical statistic that defines the importance of each word in a document collection. It is often used in information retrieval and text mining as it gives good string-based performance. 
+	\item {\bf Categories} Each post contains associated categories. In our dataset there are three hierarchical category types. Their values are more thoroughly explained under the dataset description (\secref{sec:dataset}).
 \end{itemize}
 
 \section{Evaluation}
+\TODO write section intro
+
 
 \subsection{Dataset}
--say something about other datasets?
+\label{sec:dataset}
+We reviewed many question answering (QA) systems and datasets. Finally, we decided to use Yahoo! Answers Webscope L6 dataset~\cite{bib:yahool6} because it contains a broad range of distinct question categories and there are enough active users in each of the categories we selected. Other acceptable datasets could be extracted from sites such as AskVille (\url{http://askville.amazon.com}), Mahalo (\url{http://mahalo.com}), Quora (\url{http://quora.com}) and StackOverflow (\url{http://stackoverflow.com}). The latter also includes a lot of users but it does not have specified specific categories and more importantly, the whole dataset is mostly single domain oriented. Furthermore, there are lots of other systems like AllExperts (\url{http://allexperts.com}), Ask.com (\url{http://ask.com}), Answers.com (\url{http://answers.com}) and others that lack one or more public features to build useful dataset.
 
-DATASET:
-The dataset contains 4483032 questions and their answers. All the data is anonymized with some additional metadata. For each question we have:
-anonymized question URI (e.g. 432470)
-subject
-optional content
-best answer
-all n-best answers
-question categorization using taxonomy ManCat->Cat->SubCat (e.g. Education \& Reference -> Trivia -> Trivia)
-ID of person asking the question
-ID of user providing best answer
-optional language of posted question
-optional location of posted question
-date and timestamp of the question
-The data is from 2007. The L20 dataset contains data from 2006. Are the users anonymized in the same way?
-*Note: The scientific paper using Yahoo! data should mention phrase “Yahoo! Webscope” and when the paper is published, a copy of the paper should be send to research-data-requests@yahoo-inc.com.
-Source: Yahoo! Webscope
+Yahoo! Answers is a QA site where people post questions and answers, all of which is publicly available to any web user. The L6 dataset was collected from this site in 2007 and it includes all the questions (i.e. 4483032) and their corresponding answers. Next to these data some anonymized metadata is included, so that we can model concepts of post and user. 
 
-OUR DATASET:
-question,answer = we need the whole threads.	
+Instances of post type represent questions and answers. Each instance consists of text in the body, selection of main category, category and subcategory and the id of the user who wrote the post. Questions additionally contain also title. For answer posts, the owner user is known only if it was considered the best answer for the question.
 
-1. Users that only asked - the current db: TYPE 1 DB
-topQuestioners (interest) - the one who ASKED 10(questions)+1(answer) questions(it was 5-20). Each of these questions must have at least 5 to max 20 answers. (from these result I only used a part of it -> 200 questioneers). 
-Shrink this dataset to 100 users * 10 questions = 1000 questions. For that 100 users, find also all answers they have answered (the whole threads).
+User instances are completely anonymized, so therefore we model them using their id and we also count how many answers or questions they posted in specific category type.
 
-There are 4000 questions and 3607 best answerers. (some of them - small numb - were best answerers for more than 1 question - less than 20 users)
+From the full dataset we extracted three database types:
+\begin{itemize}
+	\item {\bf Type 1}: This dataset models interest as it contains users that asked at least ten questions and each of these questions must have at least five answers.
+	\item {\bf Type 2}: To model knowledge, we extracted users who best answered at least ten questions. Again, each question thread needed to have at least five answers.
+	\item {\bf Type 3}: To jointly represent interest and knowledge, we extracted users that asked at least five questions and best answered at least five questions. Also, each of these threads needed to have at least five answers.
+\end{itemize}
+Each dataset type contains 100 users which are distinct across the datasets. As there are many different categories in the data, we representatively selected them, so that extracted 100 users within each dataset are formed as shown in \tblref{tab:datasets}.
 
-For experiment - for theese users find questions where they BEST ANSWERED. So we will evaluate them using those questions.
+\begin{table}[!h]
+	\centering
+	\renewcommand{\arraystretch}{1.3}
+	\caption{Distribution of }
+	\label{tab:datasets}
+	\begin{tabular}{l|c}\hline
+		Category & Number of selected users\\\hline\hline
+		Society \& Culture & 35\\
+		Food \& Drink & 35\\
+		Computers \& Internet & 15\\
+		Travel & 10\\
+		Cars \& Transportation & 5\\\hline\hline
+		Total & 100\\\hline
+	\end{tabular}
+\end{table}
 
-2. Users that only answered - TYPE 2 DB
-topAnswerers (knowledge) - the one who BEST ANSWERED 10(answers)+1(answer) questions. Each of these questions must have at least 5 to max 20 answers. Again we need about 100 best answerers within 1000 questions.
 
-3. Users that both ansked and answered - TYPE 3 DB
-topAskersAndAnswerers (knowledge\&interest) - the one who ASKED and BEST ANSWERED 10(5*questions+5*answers)+1(asnwer). Each of these questions must have at least 5 to max 20 answers. Again we need About 100 users within 1000 questions.
-
-For all DB types - 1 additional question where they best Answered - for Evaluation.
- 
-I think that it is the best to stick to some constant (e.g. as I wrote 10) for the number of questions (that asked or answered) by which we select users.
-
-Also all of these sets - topQuestioners, topAnswerers, and topAskersAndAnswerers - should not have intesection (different users). Because we will mix them for experiments. 
-Put all DateSets in the same DB, just assign different atribute - topQuestioners, topAnswerers, and topAskersAndAnswerers
-Profile all with Evidences: TFIDF, ConceptExtraction, SemNet, Categories
-
-Rezultati extractanih podatkov:
-Number of examples by Category (for EACH TYPE):
-"Society \& Culture": 35
-"Food \& Drink": 35
-"Computers \& Internet": 15
-"Travel": 10
-"Cars \& Transportation": 5
-
-SELECT COUNT(*) FROM interestminingl6typeall.Posts WHERE postTypeId = 1;
-\#3275
-SELECT COUNT(*) FROM interestminingl6typeall.Posts WHERE postTypeId = 2;
-\#38034
-SELECT COUNT(*) FROM interestminingl6typeall.Posts WHERE postTypeId = 2 AND ownerUserId != '';
-\#3269
-SELECT COUNT(*) FROM Users;
-\#300
+\TODO specifics in code, evaluation setting
 
 \subsection{Results}
-In the expert searching area, the metrics of mean of average precision (MAP) and Precision@N (P@N) are widely used to evaluate the precision of expert searching. They are defined as follows:
+\TODO
 
-MAP is the mean of the average of precisions over a set of query questions. The average of precisions for a query is the average of precision at each correctly retrieved expert.
+To evaluate our work we use metrics mean reciprocal rank (MRR) and Precision@N (P@N) which are widely used in the field. They are defined as follows: (1) MRR is a measure to evaluate information retrieval task in which a list of possible responses to a query is ordered by a probability of correctness. The score is defined as the average of the reciprocal ranks for a set of queries $Q$,
+$$
+	{\rm MRR = }\frac{1}{|Q|}\sum_{i=1}^{|Q|}\frac{1}{rank_i}.
+$$
+(2) Precision is the fraction of the documents retrieved that are relevant to a query. P@N is therefore precision which is evaluated at a given cut-off rank $N$ (i.e. considering only top $N$ results). In our domain it measures the proportion of correctly selected experts among all experts or intuitively a probability of how likely asking one of the top $N$ will result in getting a correct answer.
 
-
-DEFINITION 2. P@N is the percentage of top N candidate answers (experts) who are correct. (N=1,5,10)
-Precision measures the proportion of correctly selected experts among all experts (N).
-%https://en.wikipedia.org/wiki/Information_retrieval#Precision
-%https://en.wikipedia.org/wiki/Precision_(information_retrieval)
+Visualization:
+	- ascending graphs for P@N
+	- MRR table: x=db type, y=evidence types used
 
 
 \subsection{Discussion}
@@ -719,20 +703,20 @@ The work has been supported by the Slovene Research Agency ARRS within the resea
 % http://www.ctan.org/tex-archive/biblio/bibtex/contrib/doc/
 % The IEEEtran BibTeX style support page is at:
 % http://www.michaelshell.org/tex/ieeetran/bibtex/
-%\bibliographystyle{IEEEtran}
+\bibliographystyle{IEEEtran}
 % argument is your BibTeX string definitions and bibliography database(s)
-%\bibliography{IEEEabrv,../bib/paper}
+\bibliography{IEEEabrv,informatics2013}
 %
 % <OR> manually copy in the resultant .bbl file
 % set second argument of \begin to the number of references
 % (used to reserve space for the reference number labels box)
-\begin{thebibliography}{1}
 
-\bibitem{IEEEhowto:kopka}
-H.~Kopka and P.~W. Daly, \emph{A Guide to \LaTeX}, 3rd~ed.\hskip 1em plus
-  0.5em minus 0.4em\relax Harlow, England: Addison-Wesley, 1999.
 
-\end{thebibliography}
+%\begin{thebibliography}{1}
+%\bibitem{IEEEhowto:kopka}
+%H.~Kopka and P.~W. Daly, \emph{A Guide to \LaTeX}, 3rd~ed.\hskip 1em plus
+%  0.5em minus 0.4em\relax Harlow, England: Addison-Wesley, 1999.
+%\end{thebibliography}
 
 
 

@@ -11,12 +11,12 @@ import collection.mutable.ArrayBuffer
  * To change this template use File | Settings | File Templates.
  */
 object MSSQLToMySQL {
-  val connectionUrlMSSQL = "jdbc:sqlserver://192.168.7.65\\SQLEXPRESS:1433;databaseName=interestminingl6typeall;user=sa;password=xs;";
+  val connectionUrlMSSQL = "jdbc:sqlserver://192.168.7.65\\SQLEXPRESS:1433;databaseName=interestminingl6typeALL;user=sa;password=xs;";
   val connectionUrlMySQL = "jdbc:mysql://octonion:3306/interestminingl6typeall?user=interestmining&password=6hGKsfpdC4aCXC75"
   Class.forName("com.microsoft.sqlserver.jdbc.SQLServerDriver")
 
-  val smallBatchSize = 10000
-  val bigBatchSize = 1000
+  val smallBatchSize = 30000
+  val bigBatchSize = 100000
 
   var conMySQL = DriverManager.getConnection(connectionUrlMySQL)
   var conMSSQL = DriverManager.getConnection(connectionUrlMSSQL)
@@ -457,6 +457,7 @@ object MSSQLToMySQL {
      - scalac ....
      - java -cp ".;mysql-connector-java-5.1.18-bin.jar;sqljdbc4.jar;scala-library.jar" MSSQLToMySQL
      */
+    /*
     delete("Users")
     delete("Posts")
     delete("Evidence")
@@ -474,7 +475,7 @@ object MSSQLToMySQL {
     dbReinit()
     println("Doing Evidence")
     copyEvidence()
-    dbReinit()
+    dbReinit()   */
     println("Doing EvidencePost")
     copyEvidencePost()
     dbReinit()
