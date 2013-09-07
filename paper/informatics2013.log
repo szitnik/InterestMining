@@ -1,4 +1,4 @@
-This is pdfTeX, Version 3.1415926-2.3-1.40.12 (TeX Live 2011) (format=pdflatex 2011.7.3)  30 AUG 2013 11:55
+This is pdfTeX, Version 3.1415926-2.3-1.40.12 (TeX Live 2011) (format=pdflatex 2011.7.3)  30 AUG 2013 20:56
 entering extended mode
  \write18 enabled.
  file:line:error style messages enabled.
@@ -373,6 +373,20 @@ at is ev-i-dence!
  []
 
 
+LaTeX Warning: Citation `bib:conceptnet' on page 1 undefined on input line 609.
+
+
+
+LaTeX Warning: Citation `bib:semnet' on page 1 undefined on input line 610.
+
+
+LaTeX Warning: Citation `bib:wordnet' on page 1 undefined on input line 610.
+
+
+LaTeX Warning: Citation `bib:conceptnet' on page 1 undefined on input line 610.
+
+
+
 Underfull \hbox (badness 1360) in paragraph at lines 610--611
 []\OT1/ptm/b/n/10 Semantic Net-work of Terms \OT1/ptm/m/n/10 (Sem-Net) [[]]
  []
@@ -381,7 +395,35 @@ Underfull \hbox (badness 1360) in paragraph at lines 610--611
 
 
 ]
-[2] (./informatics2013.bbl)
+
+LaTeX Warning: Reference `sec:dataset' on page 2 undefined on input line 612.
+
+
+LaTeX Warning: Citation `bib:yahool6' on page 2 undefined on input line 621.
+
+
+LaTeX Warning: Reference `tab:datasets' on page 2 undefined on input line 635.
+
+
+LaTeX Warning: File `type1.pdf' not found on input line 671.
+
+
+./informatics2013.tex:671: Package pdftex.def Error: File `type1.pdf' not found
+.
+
+See the pdftex.def package documentation for explanation.
+Type  H <return>  for immediate help.
+ ...                                              
+                                                  
+l.671 	\includegraphics[width=2.5in]{type1.pdf}
+                                               
+? 
+LaTeX Font Info:    Try loading font information for OT1+pcr on input line 671.
+
+(/usr/local/texlive/2011/texmf-dist/tex/latex/psnfss/ot1pcr.fd
+File: ot1pcr.fd 2001/06/04 font definitions for OT1/pcr.
+) [2]
+(./informatics2013.bbl)
 
 ** Conference Paper **
 Before submitting the final camera ready copy, remember to:
@@ -395,31 +437,39 @@ Before submitting the final camera ready copy, remember to:
 
 [3
 
-] (./informatics2013.aux) ) 
+] (./informatics2013.aux)
+
+LaTeX Warning: There were undefined references.
+
+
+LaTeX Warning: Label(s) may have changed. Rerun to get cross-references right.
+
+ ) 
 Here is how much of TeX's memory you used:
- 4675 strings out of 493633
- 68488 string characters out of 3143378
- 142611 words of memory out of 3000000
- 7901 multiletter control sequences out of 15000+200000
- 38052 words of font info for 67 fonts, out of 3000000 for 9000
+ 4713 strings out of 493633
+ 69030 string characters out of 3143378
+ 142555 words of memory out of 3000000
+ 7933 multiletter control sequences out of 15000+200000
+ 38567 words of font info for 69 fonts, out of 3000000 for 9000
  834 hyphenation exceptions out of 8191
  37i,8n,23p,1700b,652s stack positions out of 5000i,500n,10000p,200000b,50000s
-{/usr/local/texlive/2011/texmf-dist/fonts/enc/dvips/
-base/8r.enc}</usr/local/texlive/2011/texmf-dist/fonts/type1/public/amsfonts/cm/
-cmex10.pfb></usr/local/texlive/2011/texmf-dist/fonts/type1/public/amsfonts/cm/c
-mmi10.pfb></usr/local/texlive/2011/texmf-dist/fonts/type1/public/amsfonts/cm/cm
-mi7.pfb></usr/local/texlive/2011/texmf-dist/fonts/type1/public/amsfonts/cm/cmr1
-0.pfb></usr/local/texlive/2011/texmf-dist/fonts/type1/public/amsfonts/cm/cmr7.p
-fb></usr/local/texlive/2011/texmf-dist/fonts/type1/public/amsfonts/cm/cmsy10.pf
-b></usr/local/texlive/2011/texmf-dist/fonts/type1/public/amsfonts/cm/cmsy7.pfb>
-</usr/local/texlive/2011/texmf-dist/fonts/type1/urw/times/utmb8a.pfb></usr/loca
-l/texlive/2011/texmf-dist/fonts/type1/urw/times/utmbi8a.pfb></usr/local/texlive
-/2011/texmf-dist/fonts/type1/urw/times/utmr8a.pfb></usr/local/texlive/2011/texm
-f-dist/fonts/type1/urw/times/utmri8a.pfb>
-Output written on informatics2013.pdf (3 pages, 118678 bytes).
+{/usr/local/texlive/2011/texmf-dist/fonts/enc/dvips/base/8r.enc}</usr/local/t
+exlive/2011/texmf-dist/fonts/type1/public/amsfonts/cm/cmex10.pfb></usr/local/te
+xlive/2011/texmf-dist/fonts/type1/public/amsfonts/cm/cmmi10.pfb></usr/local/tex
+live/2011/texmf-dist/fonts/type1/public/amsfonts/cm/cmmi7.pfb></usr/local/texli
+ve/2011/texmf-dist/fonts/type1/public/amsfonts/cm/cmr10.pfb></usr/local/texlive
+/2011/texmf-dist/fonts/type1/public/amsfonts/cm/cmr7.pfb></usr/local/texlive/20
+11/texmf-dist/fonts/type1/public/amsfonts/cm/cmsy10.pfb></usr/local/texlive/201
+1/texmf-dist/fonts/type1/public/amsfonts/cm/cmsy7.pfb></usr/local/texlive/2011/
+texmf-dist/fonts/type1/urw/courier/ucrr8a.pfb></usr/local/texlive/2011/texmf-di
+st/fonts/type1/urw/times/utmb8a.pfb></usr/local/texlive/2011/texmf-dist/fonts/t
+ype1/urw/times/utmbi8a.pfb></usr/local/texlive/2011/texmf-dist/fonts/type1/urw/
+times/utmr8a.pfb></usr/local/texlive/2011/texmf-dist/fonts/type1/urw/times/utmr
+i8a.pfb>
+Output written on informatics2013.pdf (3 pages, 126586 bytes).
 PDF statistics:
- 59 PDF objects out of 1000 (max. 8388607)
- 42 compressed objects within 1 object stream
+ 63 PDF objects out of 1000 (max. 8388607)
+ 45 compressed objects within 1 object stream
  0 named destinations out of 1000 (max. 500000)
  1 words of extra memory for PDF output out of 10000 (max. 10000000)
 
