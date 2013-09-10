@@ -80,6 +80,8 @@
 %\RequirePackage{geometry}
 %\geometry{bindingoffset=0cm, lmargin=2.25cm, rmargin=2.25cm, tmargin=2.25cm, bmargin=2.25cm}
 
+\usepackage{caption}
+
 \usepackage{verbatim}
 \usepackage{url}
 %\usepackage{cases}
@@ -779,9 +781,20 @@ To evaluate our work we used mean reciprocal rank (MRR) and Precision@N (P@N) wh
 \end{equation}
 (2) Precision is the fraction of the retrieved documents (users) that are relevant to a query (question). Here we count as a relevant user the one that provided the answer to the question that was selected as the best one. P@N is therefore precision which is evaluated at a given cut-off rank $N$ (i.e. considering only top $N$ results). In our domain it measures the proportion of correctly selected users among all users or intuitively a probability of how likely asking among the top $N$ selected users will result in getting a correct answer.
 
-\TODO
+Results of evaluation for all 3 database types are given in Fig. 1-4 and all MRR and P@N execution results are available online\footnote{\url{https://github.com/szitnik/InterestMining/blob/master/paper/inprogress_informatics2013/tex/informatics2013Results.pdf}}. By Unweighted we refer to the approach proposed in \cite{bib:1}, which is not using word weighting to calculate semantic similarity. By Weighted we refer algorithm proposed in this paper and for MaxSim we refer to the same algorithm, but with the imposed modification as explained in \ref{sec:alg}.  
+Since database Type 1 contains only questions posted by evaluated users, from this type we extracted only Question evidences, while for Types 2 and 3 we extracted both Answer (which refers to the best Answer) and Thread (which refers to the question with all answers) evidences. MaxSim showed considerably lower results than other two approaches on the whole dataset, so it will not be further discussed.
+
+For Type 1 the best MRR results were obtained by using Weighted approach on combined evidences form CE and Categories (Cat 1,2,3), thus semantic enrichment by CE can improve results. It should be noted also that Unweighted and Weighted are providing the same results for Cat 1, 2, 3, because for all evidences form the categories we set their weight to the same value of 1, since those evidences are directly provided by the user (so according to their importance the highest weight is assigned). TFIDF and SN gave lower results as well as when combined with other sources. Also, it is interesting that Unweighted approach evaluated on TF-IDF evidences showed considerably better results than Weighted. The reason for this is that TFIDF and SN weights are lowering results because some words that are rear, and thus more weighted, may not be so important for the question. Also, for semantic enrichment SN considers only one word and not the whole text of the post, thus imposing higher error rate. The P@N results for this database with combined evidences form CE and Categories are shown in Fig. 1.
+
+For Type 2 both for Answer and Thread evidences Weighted approach gave better results, except for combinations with TFIDF and SN where Unweighted approach is performing better, which confirms the previous observation.  However, CE is providing now slightly lower results even in combination with user provided categories, so the best results are obtained using only Categories evidences. This is because this database type contains only users who best answered at least ten questions, without questions they posted.  Therefore, semantic analysis tools like CE cannot accurately extract evidences from the text in answer since it is usually a continuation of the question.
+
+For Type 3 both for Answer and Thread evidences Weighted approach gave the best MRR results on combined evidences form CE and Categories. P@N results for combination of CE and Categories is shown in Fig 2. The highest P@30 result is obtained for Type 2 and 3 by using Categories evidences with the value of 87\%, which is also the best result for the whole evaluation. ADD for Fig 2.
+
+Finally, comparing the results achieved on each of the three databases we found that for profiling the user competence to give an answer for the provided question it is important not only to consider answers which the user best answered (i.e. to profile knowledge), but also to take into account  questions which can express interests.
 	
 \begin{figure}[!t]
+	\setlength{\belowcaptionskip}{-15pt}
+	\setlength{\abovecaptionskip}{-5pt}
 	\centering
 	\includegraphics[width=3.3in]{type1questions_PAtN.pdf}
 	\caption{Precision @ N results for database type 1 using questions and evidences from concept extractor and categories.}
@@ -789,6 +802,8 @@ To evaluate our work we used mean reciprocal rank (MRR) and Precision@N (P@N) wh
 \end{figure}
 
 \begin{figure}[!t]
+	\setlength{\belowcaptionskip}{-15pt}
+	\setlength{\abovecaptionskip}{-5pt}
 	\centering
 	\includegraphics[width=3.3in]{type3answers_PAtN.pdf}
 	\caption{Precision @ N results for database type 3 using answers and evidences from concept extractor and categories.}
@@ -797,6 +812,8 @@ To evaluate our work we used mean reciprocal rank (MRR) and Precision@N (P@N) wh
 
 
 \begin{figure}[!t]
+	\setlength{\belowcaptionskip}{-15pt}
+	\setlength{\abovecaptionskip}{-10pt}
 	\centering
 	\includegraphics[width=0.5\textwidth]{mrrType1Questions.pdf}
 	\caption{Mean reciprocal rank scores for database of type 1 on question evidences.}
@@ -804,6 +821,8 @@ To evaluate our work we used mean reciprocal rank (MRR) and Precision@N (P@N) wh
 \end{figure}
 
 \begin{figure}[!t]
+	\setlength{\belowcaptionskip}{-15pt}
+	\setlength{\abovecaptionskip}{-10pt}
 	\centering
 	\includegraphics[width=0.5\textwidth]{mrrType2Answers.pdf}
 	\caption{Mean reciprocal rank scores for database of type 2 on answers evidences.}
