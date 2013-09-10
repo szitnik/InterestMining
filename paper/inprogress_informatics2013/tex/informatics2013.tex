@@ -465,7 +465,7 @@ SI-5270 Ajdovščina}
 
 \begin{abstract}
 %\boldmath
-Intelligent Question Routing Systems (IQRS) serve as a knowledge exchange medium in an arbitrary field of expertise, where intensive communication between users is required (e.g., large enterprises, e-government agencies, technical support, health care system, army). Other applications can involve a support in educational and collaboration processes, where IQRS facilitates an efficient and effective knowledge exchange between scholars. The benefit coming from deployment of such systems includes: (a) reducing unnecessary “pinging” of experts, which are a valuable resource and (b) increasing the system owners' (enterprise, government, university) quality of service, since users are more satisfied with answers, because their questions are answered by the right persons. In this paper we investigate the role of semantic similarity for each stage of IQRS process. For question and answer analysis we use semantic enrichment, more precisely semantic query expansion with ConceptNet, WordNet (Antelope), and SemNet, string weighting and IQRS system features. Also, for question routing stage we used techniques developed for semantic similarity between two paragraphs sentences. Finally, for evaluation we used representative subsets of Yahoo! L6 Answers dataset from which we extracted three different types of users:  (1) Top questioneers, (2) Top answerers, and (3) Top combination of previous user types to model interest and expertise. Over these users we build special semantic profiles and match them to questions, answers or the whole question threads, according to the specific IQRS stage.
+Abstract –  Intelligent Question Routing Systems (IQRS) serve as a knowledge exchange medium in an arbitrary field of expertise, where intensive communication between users is required. The benefit coming from deployment of such systems includes: (a) reducing unnecessary ``pinging'' of experts, which are a valuable resource and (b) increasing the system owners' (e.g. enterprise, government, university) quality of service, since users are more satisfied with answers, because their questions are answered by the right persons. In this paper we investigate the role of semantic similarity for each stage of IQRS process. For question and answer analysis we use semantic enrichment, more precisely semantic query expansion with ConceptNet, WordNet (Antelope), and SemNet, as well as TF-IDF and IQRS system features. Also, for question routing stage we proposed an algorithm used for calculating semantic similarity between question and profile. Finally, for evaluation we used subset of Yahoo! Answers L6 dataset from which we extracted three different types of users:  (1) Top questioneers, (2) Top answerers, and (3) Top questioneers and answerers at the same. Based on carried experiments we found that, besides expertise, interest profiling can improve system performances.
 \end{abstract}
 % IEEEtran.cls defaults to using nonbold math in the Abstract.
 % This preserves the distinction between vectors and scalars. However,
@@ -490,7 +490,7 @@ Intelligent Question Routing Systems (IQRS) serve as a knowledge exchange medium
 \IEEEpeerreviewmaketitle
 
 
-
+\vspace{-0.3cm}
 \section{Introduction}
 % no \IEEEPARstart
 The key functionality of Intelligent Question Routing Systems (IQRS) is that for a question addressed by a user, to provide a good answer by searching the list of all (other) available users. The answer is provided by selecting a certain number of competent users (experts) and forwarding them the question. Selected users can provide an answer, which is then returned to the user that posed the question. The survey of state of the art in IQRS is given in \cite{bib:survey2013} which introduced an original presentation paradigm that generalizes the essence of approaches found in the open literature. The presentation paradigm includes three basic processing stages related to the three major problems of system implementation: question analysis, question forwarding, and users' knowledge profiling. All approaches presented in the survey are analyzed regarding these three basic processing stages. The outcome of the analysis was a proposal for new approaches that tackle identified problems and the work presented in this paper is a consequence of this research.
@@ -499,7 +499,7 @@ Questions are usually short in length and even may be ambiguous. Therefore, as a
 
 The task of finding a competent user is done by comparing the information extracted from the question with all available user profiles, giving a ranked list of users or ``candidates to answer''. Based on this ranked list one or more users can be selected, which then should be contacted for an answer. Since the information extracted from the question as well as those maintained in the user profiles are presented in the same way, as lists of evidences, comparison of these two lists is reduced to the calculation of their similarity. Determining the similarity can be carried out by exact comparison, i.e. determining exact matching between words, or by calculating the semantic similarity. Since the question can be semantically very similar to the profile, but still lexically very different, the better results can be achieved by using the semantic similarity. As an example that illustrates this point we can use the appearance of synonyms, words with the identical or very similar meaning, but very different in its form (e.g. words intelligent and smart). Therefore, the main focus of the work presented in this paper is calculation of semantic similarity between the question and the user profile, as well as semantic information extraction from questions and answers in order to calculate this similarity.
 
-The rest of the paper is organized as follows. In \secref{sec:relatedwork} we give a brief overview of related work and available technologies for calculating the semantic similarity of short texts. Next, we introduce our proposed SemSim algorithm for determining the numerical similarity score between the question and the user profile. In \secref{sec:userprofiling} we explain different evidence extraction types and sources that we use. Lastly, we evaluate SemSim on a Yahoo! Answers question and answers dataset and show the results of executions using various settings and in \secref{sec:conclusion}. 
+The rest of the paper is organized as follows. In \secref{sec:relatedwork} we give a brief overview of related work and available technologies for calculating the semantic similarity of short texts. Next, we introduce proposed SemSim algorithm for determining the numerical similarity score between the question and the user profile. In \secref{sec:userprofiling} we explain different evidence extraction types and sources that we use. In the next section we evaluate our approach names P2Q (Profile-to-Question) on a Yahoo! Answers dataset, present the results of executions using various settings and in \secref{sec:conclusion} we conclude the paper. 
 % You must have at least 2 lines in the paragraph with the drop letter
 % (should never be an issue)
 
@@ -599,9 +599,9 @@ Based on the analysis of existing approaches for semantic similarity of short te
 	\item It does not rely on any external knowledge base (e.g. WordNet), manually created inference rules or specific linguistic tools, which would be an obstacle in working with languages that lack these resources. Furthermore, the LinSTSS approach does not use the semantic similarity measure alone, but includes string similarity measure as well, so it gives better results for different forms of infrequent proper nouns, which is one of the major shortcomings of the knowledge-based approaches \cite{bib:JITA}.
 	\item Finally, LinSTSS is inspired by the method proposed in \cite{bib:1} that relies on a similar bag-of-words approach, but uses word specificity as in \cite{bib:2} to weight the word similarity. However it overcomes the problem of method \cite{bib:2}, which has a tendency to overestimate text similarity because it allows multiple words from one text to be paired up with a single word in the other text.
 \end{enumerate}	
-The last item is significant in determining the semantic similarity of two short texts, since it is important to determine which pairs of sentences are semantically similar, but also which are different. However, we wanted to explore if this stands also for the task of finding competent users, i.e. calculating similarity between the question and the user profile, because in this case it is necessary to determine just which profile is the most similar to the question, while it is not necessary to determine those that are different. To some extent this relates to one-class-classification problem, since we only have positive examples, e.g. we are aware of the user that provided the best answer to the question, but negative examples are unknown, i.e. we don’t know which users are not able to provide the best answer. Therefore, we introduced modification named SemSim to determine the highest (maximum) similarity between evidences from the question to evidences from the profile, but not vice versa.
+The last item is significant in determining the semantic similarity of two short texts, since it is important to determine which pairs of sentences are semantically similar, but also which are different. However, we wanted to explore if this stands also for the task of finding competent users, i.e. calculating similarity between the question and the user profile, because in this case it is necessary to determine just which profile is the most similar to the question, while it is not necessary to determine those that are different. To some extent this relates to one-class-classification problem, since we only have positive examples, e.g. we are aware of the user that provided the best answer to the question, but negative examples are unknown, i.e. we don’t know which users are not able to provide the best answer. Therefore, we introduced modification named MaxSim to determine the highest (maximum) similarity between evidences from the question to evidences from the profile, but not vice versa.
 
-The rest of the section gives a brief description of algorithms and tools that are used for user profiling, i.e. analyzing questions and answers. To be able to measure similarity between questions and user profiles, we had to extract as many semantic evidences about users as possible, their behaviour as possible. In this study we used the following techniques and sources:
+The rest of the section gives a brief description of algorithms and tools that are used for user profiling, i.e. analyzing questions and answers. To be able to measure similarity between questions and user profiles, we had to extract as many semantic evidences about users and their behaviour as possible. In this study we used the following techniques and sources:
 \begin{itemize}
 	\item {\bf ConceptNet}~\cite{bib:conceptnet} is a semantic knowledge base that describes general human knowledge. It includes words and common phrases from many written texts. They are related through open domain predicates and through common knowledge. The database was created manually and partially automatically from Wiktionary and ReVerb system, which is an open information extraction tool that extracts binary relationships of type {\it phrase-relation-phrase} in an unsupervised manner. The whole database contains 414 thousand English concepts and 903 thousand relationships between them.
 	\item {\bf Antelope} (Advanced Natural Language Object-oriented Processing Environement)~\cite{bib:antelope} is a natural language processing framework (NLP) that can handle large corpora and consists of many extensible modular components. It uses an extended lexicon version of WordNet lexicon with improved conceptualization and integrates a higher level formal ontology. The main components offer syntactic and semantic analysis of texts, anaphora extraction, word sense disambiguation and paraphrase extraction. It also includes access to other opensource NLP libraries such as Stanford Parser, WordNet and VerbNet.
@@ -611,15 +611,18 @@ The rest of the section gives a brief description of algorithms and tools that a
 	
 \section{Semantic Similarity}
 \label{sec:alg}
-This section describes phase-by-phase the algorithm of determining the numerical similarity score between the question and the user profile. The source code is accessible in publicly available repository\footnote{\url{https://github.com/szitnik/InterestMining}}.
+This section describes phase-by-phase the algorithm of determining the numerical similarity score between the question and the user profile. The source code is accessible in publicly available repository\footnote{\url{https://bitbucket.org/bfurlan/semsim/}}.
 	
-1. {\it Preprocessing} begins with the text cleaning procedure which deletes all text characters not belonging to the native script of the language in question, removes numbers and words that contain numbers, eliminates punctuation marks, removes stopwords, shifts all capital letters into lower caseand finally, lemmatizes them. Processing then continues with the removal of stop words from the given texts and the remaining words from both texts are then stemmed. After this stage, if there are evidences where their keyword consists of more than one word, for each word is created new evidence with the same weight as the original one, e.g. from evidence (botanical gardens, 0.5) two evidences are created (botanical, 0.5) and (gardens, 0.5). If there are multiple evidences with the same keyword they are merged into one by calculating resulting weight with the probabilistic T-conorm: 
+1. {\it Preprocessing} begins with the text cleaning procedure which deletes all text characters not belonging to the native script of the language in question, removes numbers and words that contain numbers, eliminates punctuation marks, removes stopwords, shifts all capital letters into lower case and finally, lemmatizes them. Processing then continues with the removal of stop words from the given texts and the remaining words from both texts are then stemmed. After this stage, if there are evidences where their keyword consists of more than one word, for each word is created new evidence with the same weight as the original one, e.g. from evidence (botanical gardens, 0.5) two evidences are created (botanical, 0.5) and (gardens, 0.5). If there are multiple evidences with the same keyword they are merged into one by calculating resulting weight with the probabilistic T-conorm: 
+\vspace{-0.1cm}
 \begin{equation}
 	\label{eq:tconorm}
 	{\rm sum(a,b)}\;=\;a+b-a\cdot b
 \end{equation}
 
+\vspace{-0.3cm}
 After the preprocessing input data, the question is represented with a array $Q$ given in (\ref{eq:q}) and the profile $P$ is given in (\ref{eq:p}). $Q$ consists of pairs $(q_i,w(q_i))$ representing evidences, where $q_i$ is the keyword and $w(q_i)$ is its assigned weight. Similarly, $P$ is consisted of pairs $(u_i,w(u_i))$. The length of array $Q$ is $m$ and for $P$ is $n$.
+\vspace{-0.2cm}
 \begin{equation}
 	\label{eq:q}
 	Q = \{(q_1,w(q_1)),(q_2,w(q_2)),\ldots(q_m,w(q_m))\}
@@ -629,13 +632,14 @@ After the preprocessing input data, the question is represented with a array $Q$
 	U=\{(u_1,w(u_1)),(u_2,w(u_2)),\ldots(u_n,w(u_n))\}
 \end{equation}
 
-    
+\vspace{-0.3cm}    
 2. {\it Processing of keywords appearing in both question and profile} starts with the identification of those words which are then removed from further processing. Their similarity scores are equal to 1, so their final weight is equal to normalized weight $w(q_i,u_i)$, which is calculated using $w(q_i)$ and $w(u_j)$ as follows:
 \begin{equation}
 	\label{eq:w}
 	w(q_i,u_j)=2^{w(q_i)\cdot w(u_j)-1}
 \end{equation}
 
+\vspace{-0.3cm}
 After calculating their values, we add them up into a similarity sum $S_{same}$, and then discard these words from further consideration. For MaxSim this step is omitted since we want to determine the highest (maximum) similarity, as it will be explained in step 7.
 
 3. {\it String similarity matrix construction} creates a matrix $M_1$ with dimensions $m\times n$ in which every cell is occupied by a numerical value $\alpha$, which lies between 0 and 1 representing the string similarity between the column-word and the row-word. The rows of the matrix are used for the remaining words from the question, while the columns represent the remaining words from the profile. A zero value denotes entirely different string contents, while a value of one indicates a perfect string match. The approach which we used to calculate string similarity is the same as in \cite{bib:LinSTSS}.
@@ -705,10 +709,9 @@ For MaxSim approach this step is executed differently since we wanted to determi
 	\label{eq:s}
 	S(Q,U) = \frac{(S_{same}+S_{different})\times (m+n)}{2mn}
 \end{equation}
-	
 \section{User Profiling}
 \label{sec:userprofiling}
-There are many approaches to extract information from textual documents. The advantages of statistical approaches are mostly higher precision on large corpora, easier implementation and longer history of research. On the other hand, if we need to process a short text, methods from the field of computational linguistics will give the best results. In order to build efficient user profiles, we collect a number of evidences from user's posts. We separate evidences by source, which can origin from question body, answer body, question title, whole post thread or IQRS system. The more detailed description of data set that we used is given in the next section.  
+There are many approaches to extract information from textual documents. The advantages of statistical approaches are mostly higher precision on large corpora, easier implementation and longer history of research. On the other hand, if we need to process a short text, methods from the field of computational linguistics will give the best results. In order to build efficient user profiles, we collect a number of evidences from user's posts. We separate evidences by source, which can origin from question body, answer body, question title, whole post thread or IQRS system. The more detailed description of data set that we used is given in the next section. The source code for data manipulation and profiling is also publicly available\footnote{\url{https://github.com/szitnik/InterestMining}}. 
 
 Before the evidence extraction we first employ some preprocessing techniques. This step is carried the same way as in step 1 of the proposed algorithm (\secref{sec:alg}). From these we further extract evidences of the following types:
 
@@ -734,11 +737,11 @@ If the weight of a concept is less than the minimum weight, it is removed and th
 {\bf Categories}:
 Each post also contains associated categories. In our dataset there are three hierarchical category types. Their values are more thoroughly explained within the dataset description (\secref{sec:dataset}).
 
-
+\vspace{-0.3cm}
 \section{Evaluation}
 This section contains an overview of available datasets and the one that we created from Yahoo! Answers L6 dataset, and as well results of evaluation and discussion.
 
-
+\vspace{-0.3cm}
 \subsection{Dataset}
 \label{sec:dataset}
 We reviewed many question answering (QA) systems and datasets. Finally, we decided to use Yahoo! Answers Webscope L6 dataset~\cite{bib:yahool6} because it contains a broad range of distinct question categories and there are enough active users in each of the categories that we selected. Other datasets could be extracted from sites such as AskVille (\url{http://askville.amazon.com}), Mahalo (\url{http://mahalo.com}), Quora (\url{http://quora.com}) and StackOverflow (\url{http://stackoverflow.com}). The latter also includes a lot of users but it does not have specified specific categories and more importantly, the whole dataset is mostly single domain oriented. Furthermore, there are lots of other systems like AllExperts (\url{http://allexperts.com}), Ask.com (\url{http://ask.com}), Answers.com (\url{http://answers.com}) and others that lack of one or more public features to build useful dataset.
@@ -758,9 +761,11 @@ From the full dataset we extracted three database types:
 Each database type contains 100 users which are distinct across the dataset. As there are many different categories in the original dataset, we representatively selected five of them and extracted 100 users for each dataset. Distribution of users per each category is shown in \tblref{tab:datasets}.
 Also, in all three database types, for each user we also selected one additional question for which he/she provided an answer that was considered as the best answer for that question. This question is then used for evaluation as explained in the following section. 
 \begin{table}[!h]
+	\setlength{\belowcaptionskip}{-5pt}
 	\centering
 	\renewcommand{\arraystretch}{1.3}
 	\caption{Distribution of post categories in each database type}
+	\addtolength{\parskip}{-0.2cm}
 	\label{tab:datasets}
 	\begin{tabular}{l|c}\hline
 		Category & Number of selected users\\\hline\hline
@@ -771,8 +776,9 @@ Also, in all three database types, for each user we also selected one additional
 		Cars \& Transportation & 5\\\hline\hline
 		Total & 100\\\hline
 	\end{tabular}
+	
 \end{table}
-
+\vspace{-0.5cm}
 \subsection{Results and Discussion}
 To evaluate our work we used mean reciprocal rank (MRR) and Precision@N (P@N) which are widely used in the field. They are defined as follows: (1) MRR is a measure to evaluate information retrieval task in which a list of possible responses to a query (question) is ordered by a probability of correctness. The score is defined in (\ref{eq:mrr}) as the average of the reciprocal ranks for a set of questions $Q$, where for each question from the dataset we determine the similarity to all available profiles and accordingly rank users, and then finally calculate the rank of the user that provided the best answer.
 \begin{equation}
@@ -781,17 +787,16 @@ To evaluate our work we used mean reciprocal rank (MRR) and Precision@N (P@N) wh
 \end{equation}
 (2) Precision is the fraction of the retrieved documents (users) that are relevant to a query (question). Here we count as a relevant user the one that provided the answer to the question that was selected as the best one. P@N is therefore precision which is evaluated at a given cut-off rank $N$ (i.e. considering only top $N$ results). In our domain it measures the proportion of correctly selected users among all users or intuitively a probability of how likely asking among the top $N$ selected users will result in getting a correct answer.
 
-Results of evaluation for all 3 database types are given in Fig. 1-4 and all MRR and P@N execution results are available online\footnote{\url{https://github.com/szitnik/InterestMining/blob/master/paper/inprogress_informatics2013/tex/informatics2013Results.pdf}}. By Unweighted we refer to the approach proposed in \cite{bib:1}, which is not using word weighting to calculate semantic similarity. By Weighted we refer algorithm proposed in this paper and for MaxSim we refer to the same algorithm, but with the imposed modification as explained in \ref{sec:alg}.  
+Results of evaluation for all 3 database types are given in Fig. 1-4 and all MRR and P@N execution results are available online\footnote{\url{https://github.com/szitnik/InterestMining/blob/master/paper/inprogress_informatics2013/tex/informatics2013Results.pdf?raw=true}}. By Unweighted we refer to the approach proposed in \cite{bib:1}, which is not using word weighting to calculate semantic similarity. By Weighted we refer algorithm proposed in this paper and for MaxSim we refer to the same algorithm, but with the imposed modification as explained in \ref{sec:alg}.  
 Since database Type 1 contains only questions posted by evaluated users, from this type we extracted only Question evidences, while for Types 2 and 3 we extracted both Answer (which refers to the best Answer) and Thread (which refers to the question with all answers) evidences. MaxSim showed considerably lower results than other two approaches on the whole dataset, so it will not be further discussed.
 
 For Type 1 the best MRR results were obtained by using Weighted approach on combined evidences form CE and Categories (Cat 1,2,3), thus semantic enrichment by CE can improve results. It should be noted also that Unweighted and Weighted are providing the same results for Cat 1, 2, 3, because for all evidences form the categories we set their weight to the same value of 1, since those evidences are directly provided by the user (so according to their importance the highest weight is assigned). TFIDF and SN gave lower results as well as when combined with other sources. Also, it is interesting that Unweighted approach evaluated on TF-IDF evidences showed considerably better results than Weighted. The reason for this is that TFIDF and SN weights are lowering results because some words that are rear, and thus more weighted, may not be so important for the question. Also, for semantic enrichment SN considers only one word and not the whole text of the post, thus imposing higher error rate. The P@N results for this database with combined evidences form CE and Categories are shown in Fig. 1.
 
 For Type 2 both for Answer and Thread evidences Weighted approach gave better results, except for combinations with TFIDF and SN where Unweighted approach is performing better, which confirms the previous observation.  However, CE is providing now slightly lower results even in combination with user provided categories, so the best results are obtained using only Categories evidences. This is because this database type contains only users who best answered at least ten questions, without questions they posted.  Therefore, semantic analysis tools like CE cannot accurately extract evidences from the text in answer since it is usually a continuation of the question.
 
-For Type 3 both for Answer and Thread evidences Weighted approach gave the best MRR results on combined evidences form CE and Categories. P@N results for combination of CE and Categories is shown in Fig 2. The highest P@30 result is obtained for Type 2 and 3 by using Categories evidences with the value of 87\%, which is also the best result for the whole evaluation. ADD for Fig 2.
+For Type 3 both for Answer and Thread evidences Weighted approach gave the best MRR results on combined evidences form CE and Categories. P@N results for combination of CE and Categories is shown in Fig 2. The highest P@30 result is obtained for Type 2 and 3 by using Categories evidences with the value of 87\%, which is also the best result for the whole evaluation.
 
-Finally, comparing the results achieved on each of the three databases we found that for profiling the user competence to give an answer for the provided question it is important not only to consider answers which the user best answered (i.e. to profile knowledge), but also to take into account  questions which can express interests.
-	
+Finally, comparing the results achieved on each of the three databases we found that for profiling the user competence to give an answer for the provided question it is important not only to consider answers which the user best answered (i.e. to profile knowledge), but also to take into account  questions which can express interests.	
 \begin{figure}[!t]
 	\setlength{\belowcaptionskip}{-15pt}
 	\setlength{\abovecaptionskip}{-5pt}
@@ -800,7 +805,6 @@ Finally, comparing the results achieved on each of the three databases we found 
 	\caption{Precision @ N results for database type 1 using questions and evidences from concept extractor and categories.}
 	\label{fig:pntype1}
 \end{figure}
-
 \begin{figure}[!t]
 	\setlength{\belowcaptionskip}{-15pt}
 	\setlength{\abovecaptionskip}{-5pt}
@@ -809,8 +813,6 @@ Finally, comparing the results achieved on each of the three databases we found 
 	\caption{Precision @ N results for database type 3 using answers and evidences from concept extractor and categories.}
 	\label{fig:pntype3}
 \end{figure}
-
-
 \begin{figure}[!t]
 	\setlength{\belowcaptionskip}{-15pt}
 	\setlength{\abovecaptionskip}{-10pt}
@@ -819,7 +821,6 @@ Finally, comparing the results achieved on each of the three databases we found 
 	\caption{Mean reciprocal rank scores for database of type 1 on question evidences.}
 	\label{fig:mrrtype1}
 \end{figure}
-
 \begin{figure}[!t]
 	\setlength{\belowcaptionskip}{-15pt}
 	\setlength{\abovecaptionskip}{-10pt}
@@ -828,13 +829,12 @@ Finally, comparing the results achieved on each of the three databases we found 
 	\caption{Mean reciprocal rank scores for database of type 2 on answers evidences.}
 	\label{fig:mrrtype2}
 \end{figure}
-
-
+\vspace{-0.3cm}
 \section{Conclusion}
 \label{sec:conclusion}
-In this paper we investigated the role of semantic similarity for each stage of IQRS process. For question and answer analysis we used semantic enrichment, string weighting and IQRS system features. In the evaluation on subsets of Yahoo! L6 Answers dataset we showed that we can benefit by building three different types of user profiles to independently model interest and expertise.
+In this paper we investigated the role of semantic similarity for each stage of IQRS process. For question and answer analysis we used semantic enrichment, TF-IDF and IQRS system features, and for their matching we employed weighted semantic similarity. Evaluation on subset of Yahoo! Answers L6 dataset showed that the best results are obtained by using semantic enrichment with proposed CE approach and weighted semantic similarity. Also, we found that for profiling the user competence to give an answer for the provided question it is important not only to consider answers which the user best answered (i.e. to profile knowledge), but also to take into account  questions which can express interests.
 
-In the future work we are going to incorporate the techniques from social network analysis for interest and knowledge prediction and together with methods for short text similarity investigate the impact of the new meta model.
+In the future work we are going to incorporate the techniques from social network analysis for interest and knowledge prediction and together with methods for short text similarity investigate the impact of the new model.
 
 
 
@@ -843,6 +843,7 @@ In the future work we are going to incorporate the techniques from social networ
 
 
 % use section* for acknowledgement
+\vspace{-0.3cm}
 \section*{Acknowledgment}
 The work has been supported by the Slovene Research Agency ARRS within the research program P2-0359 and part financed by the European Union, European Social Fund. It was also partially funded by the Ministry of Education and Science of the Republic of Serbia (projects III44009, 44006, 32047).
 
@@ -865,6 +866,7 @@ The work has been supported by the Slovene Research Agency ARRS within the resea
 % http://www.ctan.org/tex-archive/biblio/bibtex/contrib/doc/
 % The IEEEtran BibTeX style support page is at:
 % http://www.michaelshell.org/tex/ieeetran/bibtex/
+\vspace{-0.3cm}
 \bibliographystyle{IEEEtran}
 % argument is your BibTeX string definitions and bibliography database(s)
 \bibliography{IEEEabrv,informatics2013}
