@@ -1,0 +1,11 @@
+Title: 
+	The role of semantic similarity for Intelligent Question Routing
+
+Authors:
+	Bojan Furlan, University of Belgrade, Serbia, bojan.furlan@etf.bg.ac.rs
+	Slavko Žitnik, University of Ljubljana and Optilab d.o.o., Slovenia, slavko.zitnik@fri.uni-lj.si
+	Veljko M. Milutinović, University of Belgrade, Serbia, vm@etf.rs
+	Marko Bajec, University of Ljubljana, Slovenia, marko.bajec@fri.uni-lj.si
+
+Abstract: 
+	Intelligent Question Routing Systems (IQRS) aim to serve as a knowledge exchange medium in an arbitrary field of expertise, where intensive communication between users is required (e.g., large enterprises, e-government agencies, technical support, health care system, army). Other applications can involve a support in educational and collaboration processes, where IQRS facilitates an efficient and effective knowledge exchange between scholars. The benefit coming from deployment of such systems includes: (a) reducing unnecessary “pinging” of experts, which are a valuable resource and (b) increasing the system owners' (enterprise, government, university) quality of service, since users are more satisfied with answers, because their questions are answered by the right persons. In this paper we investigate the role of semantic similarity for each stage of IQRS process. For auestion analysis we use semantic enrichment, more precisely semantic query expansion with ConceptNet, WordNet (Antelope), and SemNet. Also, for question routing stage we used techniques developed for semantic similarity between two paragraphs sentences.  Finally, for evaluation we used special subsets of Yahoo! L6 Answers dataset from which we extracted three different types of users:  (1) Top questioneers, (2) Top answerers, and (3) Top combination of previous user types to model interest and expertise. Over these users we build special semantic profiles and match them to questions, answers or the whole question threads, according to the specific IQRS stage.

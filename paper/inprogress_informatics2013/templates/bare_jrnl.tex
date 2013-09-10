@@ -1,20 +1,29 @@
 
-%% bare_conf.tex
+%% bare_jrnl.tex
 %% V1.3
 %% 2007/01/11
 %% by Michael Shell
-%% See:
-%% http://www.michaelshell.org/
+%% see http://www.michaelshell.org/
 %% for current contact information.
 %%
 %% This is a skeleton file demonstrating the use of IEEEtran.cls
-%% (requires IEEEtran.cls version 1.7 or later) with an IEEE conference paper.
+%% (requires IEEEtran.cls version 1.7 or later) with an IEEE journal paper.
 %%
 %% Support sites:
 %% http://www.michaelshell.org/tex/ieeetran/
 %% http://www.ctan.org/tex-archive/macros/latex/contrib/IEEEtran/
 %% and
 %% http://www.ieee.org/
+
+
+
+% *** Authors should verify (and, if needed, correct) their LaTeX system  ***
+% *** with the testflow diagnostic prior to trusting their LaTeX platform ***
+% *** with production work. IEEE's font choices can trigger bugs that do  ***
+% *** not appear when using other class files.                            ***
+% The testflow support page is at:
+% http://www.michaelshell.org/tex/testflow/
+
 
 %%*************************************************************************
 %% Legal Notice:
@@ -43,15 +52,6 @@
 %%                    bare_conf.tex, bare_jrnl.tex, bare_jrnl_compsoc.tex
 %%*************************************************************************
 
-% *** Authors should verify (and, if needed, correct) their LaTeX system  ***
-% *** with the testflow diagnostic prior to trusting their LaTeX platform ***
-% *** with production work. IEEE's font choices can trigger bugs that do  ***
-% *** not appear when using other class files.                            ***
-% The testflow support page is at:
-% http://www.michaelshell.org/tex/testflow/
-
-
-
 % Note that the a4paper option is mainly intended so that authors in
 % countries using A4 can easily print to A4 and see how their papers will
 % look in print - the typesetting of the document will not typically be
@@ -63,57 +63,11 @@
 % should be used if it is desired that the figures are to be displayed in
 % draft mode.
 %
-\documentclass[conference]{IEEEtran}
-% Add the compsoc option for Computer Society conferences.
+\documentclass[journal]{IEEEtran}
 %
 % If IEEEtran.cls has not been installed into the LaTeX system files,
 % manually specify the path to it like:
-% \documentclass[conference]{../sty/IEEEtran}
-
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-%%%%%%%%%%%%%%%%%%%%%%   Slavko   %%%%%%%%%%%%%%%%%%%%%%%%%%%%
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-\usepackage[utf8x]{inputenc}
-\usepackage[english]{babel}
-
-\RequirePackage{geometry}
-\geometry{bindingoffset=0cm, lmargin=2.25cm, rmargin=2.25cm, tmargin=2.25cm, bmargin=2.25cm}
-
-\usepackage{verbatim}
-\usepackage{url}
-%\usepackage{cases}
-\usepackage{algorithm}
-%\usepackage[cmex10]{amsmath}
-\usepackage{alltt}
-\usepackage{algorithmic}
-\usepackage[dvipsnames,usenames]{color} 
-
-\renewcommand{\algorithmicrequire}{\textbf{Input:}}
-\renewcommand{\algorithmicensure}{\textbf{Output:}}
-
-\usepackage{graphicx}
-\graphicspath{{../graphics/}}
-%\DeclareGraphicsExtensions{.jpg}
-
-\newcommand{\secref}[1]{Section~\ref{#1}}
-%\newcommand{\appref}[1]{Appendix~\ref{#1}}
-\newcommand{\figref}[1]{Fig.~\ref{#1}}
-\newcommand{\tblref}[1]{Table~\ref{#1}}
-%\newcommand{\eqref}[1]{Eq.~(\ref{#1})}
-\newcommand{\algref}[1]{Algorithm~(\ref{#1})}
-
-\newcommand{\TODO}[0]{{\color{BrickRed}\textbf{TODO}}}
-\newcommand{\todo}[1]{{\color{BrickRed}\textbf{TODO:} #1}}
-\newcommand{\REDO}[1]{{\color{Mahogany}\textbf{REDO:} \textit{#1}}}
-\newcommand{\REFS}[0]{{\color{Sepia}\textbf{REFS}}}
-\newcommand{\READ}[1]{{\color{Sepia} #1}}
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% \documentclass[journal]{../sty/IEEEtran}
 
 
 
@@ -365,6 +319,48 @@
 % not format its papers in such ways.
 
 
+%\ifCLASSOPTIONcaptionsoff
+%  \usepackage[nomarkers]{endfloat}
+% \let\MYoriglatexcaption\caption
+% \renewcommand{\caption}[2][\relax]{\MYoriglatexcaption[#2]{#2}}
+%\fi
+% endfloat.sty was written by James Darrell McCauley and Jeff Goldberg.
+% This package may be useful when used in conjunction with IEEEtran.cls'
+% captionsoff option. Some IEEE journals/societies require that submissions
+% have lists of figures/tables at the end of the paper and that
+% figures/tables without any captions are placed on a page by themselves at
+% the end of the document. If needed, the draftcls IEEEtran class option or
+% \CLASSINPUTbaselinestretch interface can be used to increase the line
+% spacing as well. Be sure and use the nomarkers option of endfloat to
+% prevent endfloat from "marking" where the figures would have been placed
+% in the text. The two hack lines of code above are a slight modification of
+% that suggested by in the endfloat docs (section 8.3.1) to ensure that
+% the full captions always appear in the list of figures/tables - even if
+% the user used the short optional argument of \caption[]{}.
+% IEEE papers do not typically make use of \caption[]'s optional argument,
+% so this should not be an issue. A similar trick can be used to disable
+% captions of packages such as subfig.sty that lack options to turn off
+% the subcaptions:
+% For subfig.sty:
+% \let\MYorigsubfloat\subfloat
+% \renewcommand{\subfloat}[2][\relax]{\MYorigsubfloat[]{#2}}
+% For subfigure.sty:
+% \let\MYorigsubfigure\subfigure
+% \renewcommand{\subfigure}[2][\relax]{\MYorigsubfigure[]{#2}}
+% However, the above trick will not work if both optional arguments of
+% the \subfloat/subfig command are used. Furthermore, there needs to be a
+% description of each subfigure *somewhere* and endfloat does not add
+% subfigure captions to its list of figures. Thus, the best approach is to
+% avoid the use of subfigure captions (many IEEE journals avoid them anyway)
+% and instead reference/explain all the subfigures within the main caption.
+% The latest version of endfloat.sty and its documentation can obtained at:
+% http://www.ctan.org/tex-archive/macros/latex/contrib/endfloat/
+%
+% The IEEEtran \ifCLASSOPTIONcaptionsoff conditional can also be used
+% later in the document, say, to conditionally put the References on a 
+% page by themselves.
+
+
 
 
 
@@ -397,59 +393,66 @@
 %
 % paper title
 % can use linebreaks \\ within to get better formatting as desired
-\title{The role of semantic similarity for Intelligent Question Routing}
+\title{Bare Demo of IEEEtran.cls for Journals}
+%
+%
+% author names and IEEE memberships
+% note positions of commas and nonbreaking spaces ( ~ ) LaTeX will not break
+% a structure at a ~ so this keeps an author's name from being broken across
+% two lines.
+% use \thanks{} to gain access to the first footnote area
+% a separate \thanks must be used for each paragraph as LaTeX2e's \thanks
+% was not built to handle multiple paragraphs
+%
 
+\author{Michael~Shell,~\IEEEmembership{Member,~IEEE,}
+        John~Doe,~\IEEEmembership{Fellow,~OSA,}
+        and~Jane~Doe,~\IEEEmembership{Life~Fellow,~IEEE}% <-this % stops a space
+\thanks{M. Shell is with the Department
+of Electrical and Computer Engineering, Georgia Institute of Technology, Atlanta,
+GA, 30332 USA e-mail: (see http://www.michaelshell.org/contact.html).}% <-this % stops a space
+\thanks{J. Doe and J. Doe are with Anonymous University.}% <-this % stops a space
+\thanks{Manuscript received April 19, 2005; revised January 11, 2007.}}
 
-% author names and affiliations
-% use a multiple column layout for up to three different
-% affiliations
-\author{\IEEEauthorblockN{Bojan Furlan}
-\IEEEauthorblockA{University of Belgrade\\
-Bulevar kralja Aleksandra 73\\
-RS-11120 Belgrade\\
-Email: bojan.furlan@etf.bg.ac.rs}
-\and
-\IEEEauthorblockN{Slavko Žitnik}
-\IEEEauthorblockA{University of Ljubljana\\
-Tržaška cesta 25\\
-SI-1000 Ljubljana\\
-Email: slavko.zitnik@fri.uni-lj.si}
-\and
-\IEEEauthorblockN{Boško Nikolič}
-\IEEEauthorblockA{University of Belgrade\\
-Bulevar kralja Aleksandra 73\\
-RS-11120 Belgrade\\
-Email: bosko.nikolic@etf.bg.ac.rs}
-\and
-\IEEEauthorblockN{Marko Bajec}
-\IEEEauthorblockA{University of Ljubljana\\
-Tržaška cesta 25\\
-SI-1000 Ljubljana\\
-Email: marko.bajec@fri.uni-lj.si}
-}
-
-% conference papers do not typically use \thanks and this command
-% is locked out in conference mode. If really needed, such as for
-% the acknowledgment of grants, issue a \IEEEoverridecommandlockouts
-% after \documentclass
-
-% for over three affiliations, or if they all won't fit within the width
-% of the page, use this alternative format:
+% note the % following the last \IEEEmembership and also \thanks - 
+% these prevent an unwanted space from occurring between the last author name
+% and the end of the author line. i.e., if you had this:
 % 
-%\author{\IEEEauthorblockN{Michael Shell\IEEEauthorrefmark{1},
-%Homer Simpson\IEEEauthorrefmark{2},
-%James Kirk\IEEEauthorrefmark{3}, 
-%Montgomery Scott\IEEEauthorrefmark{3} and
-%Eldon Tyrell\IEEEauthorrefmark{4}}
-%\IEEEauthorblockA{\IEEEauthorrefmark{1}School of Electrical and Computer Engineering\\
-%Georgia Institute of Technology,
-%Atlanta, Georgia 30332--0250\\ Email: see http://www.michaelshell.org/contact.html}
-%\IEEEauthorblockA{\IEEEauthorrefmark{2}Twentieth Century Fox, Springfield, USA\\
-%Email: homer@thesimpsons.com}
-%\IEEEauthorblockA{\IEEEauthorrefmark{3}Starfleet Academy, San Francisco, California 96678-2391\\
-%Telephone: (800) 555--1212, Fax: (888) 555--1212}
-%\IEEEauthorblockA{\IEEEauthorrefmark{4}Tyrell Inc., 123 Replicant Street, Los Angeles, California 90210--4321}}
+% \author{....lastname \thanks{...} \thanks{...} }
+%                     ^------------^------------^----Do not want these spaces!
+%
+% a space would be appended to the last name and could cause every name on that
+% line to be shifted left slightly. This is one of those "LaTeX things". For
+% instance, "\textbf{A} \textbf{B}" will typeset as "A B" not "AB". To get
+% "AB" then you have to do: "\textbf{A}\textbf{B}"
+% \thanks is no different in this regard, so shield the last } of each \thanks
+% that ends a line with a % and do not let a space in before the next \thanks.
+% Spaces after \IEEEmembership other than the last one are OK (and needed) as
+% you are supposed to have spaces between the names. For what it is worth,
+% this is a minor point as most people would not even notice if the said evil
+% space somehow managed to creep in.
 
+
+
+% The paper headers
+\markboth{Journal of \LaTeX\ Class Files,~Vol.~6, No.~1, January~2007}%
+{Shell \MakeLowercase{\textit{et al.}}: Bare Demo of IEEEtran.cls for Journals}
+% The only time the second header will appear is for the odd numbered pages
+% after the title page when using the twoside option.
+% 
+% *** Note that you probably will NOT want to include the author's ***
+% *** name in the headers of peer review papers.                   ***
+% You can use \ifCLASSOPTIONpeerreview for conditional compilation here if
+% you desire.
+
+
+
+
+% If you want to put a publisher's ID mark on the page you can do it like
+% this:
+%\IEEEpubid{0000--0000/00\$00.00~\copyright~2007 IEEE}
+% Remember, if you use this you must call \IEEEpubidadjcol in the second
+% column for its text to clear the IEEEpubid mark.
 
 
 
@@ -465,16 +468,21 @@ Email: marko.bajec@fri.uni-lj.si}
 
 \begin{abstract}
 %\boldmath
-Intelligent Question Routing Systems (IQRS) aim to serve as a knowledge exchange medium in an arbitrary field of expertise, where intensive communication between users is required (e.g., large enterprises, e-government agencies, technical support, health care system, army). Other applications can involve a support in educational and collaboration processes, where IQRS facilitates an efficient and effective knowledge exchange between scholars. The benefit coming from deployment of such systems includes: (a) reducing unnecessary “pinging” of experts, which are a valuable resource and (b) increasing the system owners' (enterprise, government, university) quality of service, since users are more satisfied with answers, because their questions are answered by the right persons. In this paper we investigate the role of semantic similarity for each stage of IQRS process. For question analysis we use semantic enrichment, more precisely semantic query expansion with ConceptNet, WordNet (Antelope), and SemNet. Also, for question routing stage we used techniques developed for semantic similarity between two paragraphs sentences.  Finally, for evaluation we used special subsets of Yahoo! L6 Answers dataset from which we extracted three different types of users:  (1) Top questioneers, (2) Top answerers, and (3) Top combination of previous user types to model interest and expertise. Over these users we build special semantic profiles and match them to questions, answers or the whole question threads, according to the specific IQRS stage.
+The abstract goes here.
 \end{abstract}
 % IEEEtran.cls defaults to using nonbold math in the Abstract.
 % This preserves the distinction between vectors and scalars. However,
-% if the conference you are submitting to favors bold math in the abstract,
+% if the journal you are submitting to favors bold math in the abstract,
 % then you can use LaTeX's standard command \boldmath at the very start
-% of the abstract to achieve this. Many IEEE journals/conferences frown on
-% math in the abstract anyway.
+% of the abstract to achieve this. Many IEEE journals frown on math
+% in the abstract anyway.
 
-% no keywords
+% Note that keywords are not normally used for peerreview papers.
+\begin{IEEEkeywords}
+IEEEtran, journal, \LaTeX, paper, template.
+\end{IEEEkeywords}
+
+
 
 
 
@@ -492,11 +500,23 @@ Intelligent Question Routing Systems (IQRS) aim to serve as a knowledge exchange
 
 
 \section{Introduction}
-% no \IEEEPARstart
-\TODO define that post can be answer or question
-
-This demo file is intended to serve as a ``starter file''
-for IEEE conference papers produced under \LaTeX\ using
+% The very first letter is a 2 line initial drop letter followed
+% by the rest of the first word in caps.
+% 
+% form to use if the first word consists of a single letter:
+% \IEEEPARstart{A}{demo} file is ....
+% 
+% form to use if you need the single drop letter followed by
+% normal text (unknown if ever used by IEEE):
+% \IEEEPARstart{A}{}demo file is ....
+% 
+% Some journals put the first two words in caps:
+% \IEEEPARstart{T}{his demo} file is ....
+% 
+% Here we have the typical use of a "T" for an initial drop letter
+% and "HIS" in caps to complete the first word.
+\IEEEPARstart{T}{his} demo file is intended to serve as a ``starter file''
+for IEEE journal papers produced under \LaTeX\ using
 IEEEtran.cls version 1.7 and later.
 % You must have at least 2 lines in the paragraph with the drop letter
 % (should never be an issue)
@@ -505,6 +525,15 @@ I wish you the best of success.
 \hfill mds
  
 \hfill January 11, 2007
+
+\subsection{Subsection Heading Here}
+Subsection text here.
+
+% needed in second column of first page if using \IEEEpubid
+%\IEEEpubidadjcol
+
+\subsubsection{Subsubsection Heading Here}
+Subsubsection text here.
 
 
 % An example of a floating figure using the graphicx package.
@@ -584,92 +613,10 @@ I wish you the best of success.
 
 % Note that IEEE does not put floats in the very first column - or typically
 % anywhere on the first page for that matter. Also, in-text middle ("here")
-% positioning is not used. Most IEEE journals/conferences use top floats
-% exclusively. Note that, LaTeX2e, unlike IEEE journals/conferences, places
-% footnotes above bottom floats. This can be corrected via the \fnbelowfloat
-% command of the stfloats package.
-
-
-\section{Related work}
-	SemSim \& AvailableTech
-	
-\section{Semantic Similarity}
-
-\section{Algorithm}
-	Max Sem sim
-	\TODO define what is evidence!
-	\TODO include link to the software repository
-	
-\section{UserProfiling}
-\TODO what is profiling, how we do profiling, what do we think of it ...
-
-\subsection{Sources}
-To build efficient user profiles, we collect a lot of evidences from user's posts. We separate evidences by source, which can origin from question body, answer body, question title, whole post thread or IQRS system. We further categorize evidences by their type, which can be one  the following:
-\begin{itemize}
-	\item {\bf ConceptNet}~\cite{bib:conceptnet} is a semantic knowledge base that describes general human knowledge. It includes words and common phrases from many written texts. They are related through open domain predicates and through common knowledge. The database was created manually and partially automatically from Wiktionary and ReVerb system, which is an open information extraction tool that extracts binary relationships of type {\it phrase-relation-phrase} in an unsupervised manner. The whole database contains 414 thousand English concepts and 903 thousand relationships between them.
-	\item {\bf Semantic Network of Terms} (SemNet)~\cite{bib:semnet} is a large-scale network of technical terminology which allows querying terms and retrieving ranked lists of their semantically related terms. The network was automatically constructed based on the noun terms from English Google Books Ngram Dataset using word co-occurrence analysis. The network consists of 2.8 million distinct single and multi-word terms and 37.5 million weighted edges between them. SemNet includes a large part of the same concepts and relationships from similar semantic knowledge bases such as WordNet~\cite{bib:wordnet} and ConceptNet~\cite{bib:conceptnet}. 
-	\item {\bf TF-IDF}, term frequency-inverse document frequency is a general numerical statistic that defines the importance of each word in a document collection. It is often used in information retrieval and text mining as it gives good string-based performance. 
-	\item {\bf Categories} Each post contains associated categories. In our dataset there are three hierarchical category types. Their values are more thoroughly explained under the dataset description (\secref{sec:dataset}).
-\end{itemize}
-
-\section{Evaluation}
-\TODO write section intro
-
-
-\subsection{Dataset}
-\label{sec:dataset}
-We reviewed many question answering (QA) systems and datasets. Finally, we decided to use Yahoo! Answers Webscope L6 dataset~\cite{bib:yahool6} because it contains a broad range of distinct question categories and there are enough active users in each of the categories we selected. Other acceptable datasets could be extracted from sites such as AskVille (\url{http://askville.amazon.com}), Mahalo (\url{http://mahalo.com}), Quora (\url{http://quora.com}) and StackOverflow (\url{http://stackoverflow.com}). The latter also includes a lot of users but it does not have specified specific categories and more importantly, the whole dataset is mostly single domain oriented. Furthermore, there are lots of other systems like AllExperts (\url{http://allexperts.com}), Ask.com (\url{http://ask.com}), Answers.com (\url{http://answers.com}) and others that lack one or more public features to build useful dataset.
-
-Yahoo! Answers is a QA site where people post questions and answers, all of which is publicly available to any web user. The L6 dataset was collected from this site in 2007 and it includes all the questions (i.e. 4483032) and their corresponding answers. Next to these data some anonymized metadata is included, so that we can model concepts of post and user. 
-
-Instances of post type represent questions and answers. Each instance consists of text in the body, selection of main category, category and subcategory and the id of the user who wrote the post. Questions additionally contain also title. For answer posts, the owner user is known only if it was considered the best answer for the question.
-
-User instances are completely anonymized, so therefore we model them using their id and we also count how many answers or questions they posted in specific category type.
-
-From the full dataset we extracted three database types:
-\begin{itemize}
-	\item {\bf Type 1}: This dataset models interest as it contains users that asked at least ten questions and each of these questions must have at least five answers.
-	\item {\bf Type 2}: To model knowledge, we extracted users who best answered at least ten questions. Again, each question thread needed to have at least five answers.
-	\item {\bf Type 3}: To jointly represent interest and knowledge, we extracted users that asked at least five questions and best answered at least five questions. Also, each of these threads needed to have at least five answers.
-\end{itemize}
-Each dataset type contains 100 users which are distinct across the datasets. As there are many different categories in the data, we representatively selected them, so that extracted 100 users within each dataset are formed as shown in \tblref{tab:datasets}.
-
-\begin{table}[!h]
-	\centering
-	\renewcommand{\arraystretch}{1.3}
-	\caption{Distribution of post categories in each database type}
-	\label{tab:datasets}
-	\begin{tabular}{l|c}\hline
-		Category & Number of selected users\\\hline\hline
-		Society \& Culture & 35\\
-		Food \& Drink & 35\\
-		Computers \& Internet & 15\\
-		Travel & 10\\
-		Cars \& Transportation & 5\\\hline\hline
-		Total & 100\\\hline
-	\end{tabular}
-\end{table}
-
-
-\TODO specifics in code, evaluation setting
-
-\subsection{Results}
-\TODO
-
-To evaluate our work we use metrics mean reciprocal rank (MRR) and Precision@N (P@N) which are widely used in the field. They are defined as follows: (1) MRR is a measure to evaluate information retrieval task in which a list of possible responses to a query is ordered by a probability of correctness. The score is defined as the average of the reciprocal ranks for a set of queries $Q$,
-$$
-	{\rm MRR = }\frac{1}{|Q|}\sum_{i=1}^{|Q|}\frac{1}{rank_i}.
-$$
-(2) Precision is the fraction of the documents retrieved that are relevant to a query. P@N is therefore precision which is evaluated at a given cut-off rank $N$ (i.e. considering only top $N$ results). In our domain it measures the proportion of correctly selected experts among all experts or intuitively a probability of how likely asking one of the top $N$ will result in getting a correct answer.
-
-Visualization:
-	- ascending graphs for P@N
-	- MRR table: x=db type, y=evidence types used
-	
-\begin{figure}[!t]	\centering	\includegraphics[width=2.5in]{type1questions_PAtN.pdf}	\caption{Precision @ N results for database type 1 using questions and categories evidences.}	\label{fig:pntype1}\end{figure}
-
-
-\subsection{Discussion}
+% positioning is not used. Most IEEE journals use top floats exclusively.
+% Note that, LaTeX2e, unlike IEEE journals, places footnotes above bottom
+% floats. This can be corrected via the \fnbelowfloat command of the
+% stfloats package.
 
 
 
@@ -679,14 +626,44 @@ The conclusion goes here.
 
 
 
-% conference papers do not normally have an appendix
+
+% if have a single appendix:
+%\appendix[Proof of the Zonklar Equations]
+% or
+%\appendix  % for no appendix heading
+% do not use \section anymore after \appendix, only \section*
+% is possibly needed
+
+% use appendices with more than one appendix
+% then use \section to start each appendix
+% you must declare a \section before using any
+% \subsection or using \label (\appendices by itself
+% starts a section numbered zero.)
+%
+
+
+\appendices
+\section{Proof of the First Zonklar Equation}
+Appendix one text goes here.
+
+% you can choose not to have a title for an appendix
+% if you want by leaving the argument blank
+\section{}
+Appendix two text goes here.
 
 
 % use section* for acknowledgement
 \section*{Acknowledgment}
-The work has been supported by the Slovene Research Agency ARRS within the research program P2-0359 and part financed by the European Union, European Social Fund.
 
 
+The authors would like to thank...
+
+
+% Can use something like this to put references on a page
+% by themselves when using endfloat and the captionsoff option.
+\ifCLASSOPTIONcaptionsoff
+  \newpage
+\fi
 
 
 
@@ -705,21 +682,60 @@ The work has been supported by the Slovene Research Agency ARRS within the resea
 % http://www.ctan.org/tex-archive/biblio/bibtex/contrib/doc/
 % The IEEEtran BibTeX style support page is at:
 % http://www.michaelshell.org/tex/ieeetran/bibtex/
-\bibliographystyle{IEEEtran}
+%\bibliographystyle{IEEEtran}
 % argument is your BibTeX string definitions and bibliography database(s)
-\bibliography{IEEEabrv,informatics2013}
+%\bibliography{IEEEabrv,../bib/paper}
 %
 % <OR> manually copy in the resultant .bbl file
 % set second argument of \begin to the number of references
 % (used to reserve space for the reference number labels box)
+\begin{thebibliography}{1}
 
+\bibitem{IEEEhowto:kopka}
+H.~Kopka and P.~W. Daly, \emph{A Guide to \LaTeX}, 3rd~ed.\hskip 1em plus
+  0.5em minus 0.4em\relax Harlow, England: Addison-Wesley, 1999.
 
-%\begin{thebibliography}{1}
-%\bibitem{IEEEhowto:kopka}
-%H.~Kopka and P.~W. Daly, \emph{A Guide to \LaTeX}, 3rd~ed.\hskip 1em plus
-%  0.5em minus 0.4em\relax Harlow, England: Addison-Wesley, 1999.
-%\end{thebibliography}
+\end{thebibliography}
 
+% biography section
+% 
+% If you have an EPS/PDF photo (graphicx package needed) extra braces are
+% needed around the contents of the optional argument to biography to prevent
+% the LaTeX parser from getting confused when it sees the complicated
+% \includegraphics command within an optional argument. (You could create
+% your own custom macro containing the \includegraphics command to make things
+% simpler here.)
+%\begin{biography}[{\includegraphics[width=1in,height=1.25in,clip,keepaspectratio]{mshell}}]{Michael Shell}
+% or if you just want to reserve a space for a photo:
+
+\begin{IEEEbiography}{Michael Shell}
+Biography text here.
+\end{IEEEbiography}
+
+% if you will not have a photo at all:
+\begin{IEEEbiographynophoto}{John Doe}
+Biography text here.
+\end{IEEEbiographynophoto}
+
+% insert where needed to balance the two columns on the last page with
+% biographies
+%\newpage
+
+\begin{IEEEbiographynophoto}{Jane Doe}
+Biography text here.
+\end{IEEEbiographynophoto}
+
+% You can push biographies down or up by placing
+% a \vfill before or after them. The appropriate
+% use of \vfill depends on what kind of text is
+% on the last page and whether or not the columns
+% are being equalized.
+
+%\vfill
+
+% Can be used to pull up biographies so that the bottom of the last one
+% is flush with the other column.
+%\enlargethispage{-5in}
 
 
 
