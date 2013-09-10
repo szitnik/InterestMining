@@ -500,11 +500,10 @@ The task of finding a competent user is done by comparing the information extrac
 The rest of the paper is organized as follows. In \secref{sec:relatedwork} we give a brief overview of related work and available technologies for calculating the semantic similarity of short texts. Next, we introduce our proposed SemSim algorithm for determining the numerical similarity score between the question and the user profile. In \secref{sec:userprofiling} we explain different evidence extraction types and sources that we use. Lastly, we evaluate SemSim on a Yahoo! Answers question and answers dataset and show the results of executions using various settings and in \secref{sec:conclusion}. 
 % You must have at least 2 lines in the paragraph with the drop letter
 % (should never be an issue)
-\TODO drop letter, I wish you the best of success.
 
-\hfill mds
- 
-\hfill January 11, 2007
+%\hfill mds
+
+%\hfill January 11, 2007
 
 
 % An example of a floating figure using the graphicx package.
@@ -610,7 +609,7 @@ The rest of the section gives a brief description of algorithms and tools that a
 	
 \section{Semantic Similarity}
 \label{sec:alg}
-This section describes phase-by-phase the algorithm of determining the numerical similarity score between the question and the user profile, followed by an example of the execution. 
+This section describes phase-by-phase the algorithm of determining the numerical similarity score between the question and the user profile. The source code is accessible in publicly available repository\footnote{\url{https://github.com/szitnik/InterestMining}}.
 	
 1. {\it Preprocessing} begins with the text cleaning procedure which deletes all text characters not belonging to the native script of the language in question, removes numbers and words that contain numbers, eliminates punctuation marks, removes stopwords, shifts all capital letters into lower caseand finally, lemmatizes them. Processing then continues with the removal of stop words from the given texts and the remaining words from both texts are then stemmed. After this stage, if there are evidences where their keyword consists of more than one word, for each word is created new evidence with the same weight as the original one, e.g. from evidence (botanical gardens, 0.5) two evidences are created (botanical, 0.5) and (gardens, 0.5). If there are multiple evidences with the same keyword they are merged into one by calculating resulting weight with the probabilistic T-conorm: 
 \begin{equation}
@@ -623,7 +622,6 @@ After the preprocessing input data, the question is represented with a array $Q$
 	\label{eq:q}
 	Q = \{(q_1,w(q_1)),(q_2,w(q_2)),\ldots(q_m,w(q_m))\}
 \end{equation} 
-
 \begin{equation}
 	\label{eq:p}
 	U=\{(u_1,w(u_1)),(u_2,w(u_2)),\ldots(u_n,w(u_n))\}
@@ -639,7 +637,6 @@ After the preprocessing input data, the question is represented with a array $Q$
 After calculating their values, we add them up into a similarity sum $S_{same}$, and then discard these words from further consideration. For MaxSim this step is omitted since we want to determine the highest (maximum) similarity, as it will be explained in step 7.
 
 3. {\it String similarity matrix construction} creates a matrix $M_1$ with dimensions $m\times n$ in which every cell is occupied by a numerical value $\alpha$, which lies between 0 and 1 representing the string similarity between the column-word and the row-word. The rows of the matrix are used for the remaining words from the question, while the columns represent the remaining words from the profile. A zero value denotes entirely different string contents, while a value of one indicates a perfect string match. The approach which we used to calculate string similarity is the same as in \cite{bib:LinSTSS}.
-
 \begin{equation}
 	\label{eq:m1}
 	M_1 = 
@@ -653,7 +650,6 @@ After calculating their values, we add them up into a similarity sum $S_{same}$,
 \end{equation}
 
 4. {\it Semantic similarity matrix construction} creates a matrix $M_2$ with dimensions $m\times n$ in which every cell is occupied by a numerical value $\beta$ which lies between 0 and 1 representing the semantic similarity between the column-word and the row-word. The rows of the matrix are used for the words from the question, while the columns represent the words from the profile. Similar to the string similarity measurement, a zero value denotes entirely different semantic contents, while a value of one indicates a perfect semantic match. We gain the semantic similarity of words in a pair by calculating the cosine similarity in the same way as in \cite{bib:LinSTSS}.
-
 \begin{equation}
 	\label{eq:m2}
 	M_2 = 
@@ -668,13 +664,11 @@ After calculating their values, we add them up into a similarity sum $S_{same}$,
 
 
 5. {\it Similarity matrix unification} combines the string and the semantic similarity matrices into one by multiplying their values by a certain ponderation factor and adding them up as in \ref{eq:m3a}. We used ponderation values of 0.45 and 0.55 for the string and semantic similarity scores, respectively.
-
 \begin{eqnarray}
 	\label{eq:m3a}
 	M_3 & = & \psi M_1 + \varphi M_2 \\
 	1 & = & \psi + \varphi
 \end{eqnarray}
-
 \begin{equation}
 	\label{eq:m3b}
 	M_3 = 
@@ -688,7 +682,6 @@ After calculating their values, we add them up into a similarity sum $S_{same}$,
 \end{equation}
 
 6. The {\it weighted matrix construction} begins with the creation of a normalized weighted matrix in which every cell is occupied by a weight $w(q_i,u_j)$ calculated using \ref{eq:w}. The final similarity matrix $M_4$, shown in \ref{eq:m4}, is gained by multiplying each cell of the unified similarity matrix with the corresponding value $\gamma_{i,j}$ from $M_3$.
-
 \begin{equation}
 	\label{eq:m4}
 	M_4 = 
@@ -706,84 +699,14 @@ After calculating their values, we add them up into a similarity sum $S_{same}$,
 For MaxSim approach this step is executed differently since we wanted to determine the highest (maximum) similarity between evidences from question to profile, but not vice versa. Therefore, only for each row, which represents words from the question, we search for the highest value within the final similarity matrix, and add it to a similarity sum $S_{different}$. Since in the step 2 none of the words is omitted for this approach, $S_{same}=0$.
  
 8. The {\it final similarity score calculation} is performed by utilizing the following formula:
- 
- \begin{equation}
+\begin{equation}
 	\label{eq:s}
 	S(Q,U) = \frac{(S_{same}+S_{different})\times (m+n)}{2mn}
 \end{equation}
 	
-	\TODO include link to the software repository
-	\TODO example:
-	
-
-	
-\begin{table}[!t]
-\renewcommand{\arraystretch}{1.3}
-	\caption{String similarity matrix - ConceptExtractor}
-	\label{tab:stringsim}
-	\centering
-	\begin{tabular}{l||c|c|c|c}\hline
-	&\bfseries meatbal & \bfseries spagetti & \bfseries good & \bfseries recipi \\\hline\hline
-		\bfseries chemistry & 0.03 & 0.02 & 0.00 & 0.03\\
-		\bfseries shrimp & 0.02 & 0.04 & 0.00 & 0.09\\
-		\bfseries ocean & 0.08 & 0.02 & 0.03 & 0.02\\
-		\bfseries lake & 0.02 & 0.05 & 0.00 & 0.03\\
-		\bfseries river & 0.02 & 0.02 & 0.00 & 0.07\\
-	\hline
-	\end{tabular}
-\end{table}
-
-\begin{table}[!t]
-\renewcommand{\arraystretch}{1.3}
-	\caption{Semantic similarity matrix - ConceptExtractor}
-	\label{tab:semsimm}
-	\centering
-	\begin{tabular}{l||c|c|c|c}\hline
-	&\bfseries meatbal & \bfseries spagetti & \bfseries good & \bfseries recipi \\\hline\hline
-		\bfseries chemistry & 0.00 & 0.00 & 0.00 & 0.00\\
-		\bfseries shrimp & 0.00 & 0.00 & 0.10 & 0.03\\
-		\bfseries ocean & 0.00 & 0.00 & 0.08 & 0.05\\
-		\bfseries lake & 0.00 & 0.00 & 0.08 & 0.05\\
-		\bfseries river & 0.00 & 0.00 & 0.06 & 0.05\\
-	\hline
-	\end{tabular}
-\end{table}
-
-\begin{table}[!t]
-\renewcommand{\arraystretch}{1.3}
-	\caption{Term similarity matrix - ConceptExtractor}
-	\label{tab:termsim}
-	\centering
-	\begin{tabular}{l||c|c|c|c}\hline
-	&\bfseries meatbal & \bfseries spagetti & \bfseries good & \bfseries recipi \\\hline\hline
-		\bfseries chemistry & 1.00 & 1.00 & 0.33 & 0.30\\
-		\bfseries shrimp & 0.85 & 0.85 & 0.28 & 0.25\\
-		\bfseries ocean & 0.92 & 0.92 & 0.30 & 0.28\\
-		\bfseries lake & 0.90 & 0.90 & 0.30 & 0.27\\
-		\bfseries river & 1.00 & 1.00 & 0.33 & 0.30\\
-	\hline
-	\end{tabular}
-\end{table}
-
-\begin{table}[!t]
-\renewcommand{\arraystretch}{1.3}
-	\caption{Joint similarity matrix - ConceptExtractor}
-	\label{tab:jointsim}
-	\centering
-	\begin{tabular}{l||c|c|c|c}\hline
-	&\bfseries meatbal & \bfseries spagetti & \bfseries good & \bfseries recipi \\\hline\hline
-		\bfseries chemistry & 0.01 & 0.01 & 0.00 & 0.01\\
-		\bfseries shrimp & 0.01 & 0.02 & 0.03 & 0.03\\
-		\bfseries ocean & 0.03 & 0.01 & 0.04 & 0.02\\
-		\bfseries lake & 0.01 & 0.02 & 0.03 & 0.02\\
-		\bfseries river & 0.01 & 0.01 & 0.02 & 0.04\\
-	\hline
-	\end{tabular}
-\end{table}
-	
 \section{User Profiling}
 \label{sec:userprofiling}
-There are many approaches to extract information from textual documents. The advantages of statistical approaches are mostly higher precision on large corpora, easier implementation and longer history of research. On the other hand, if we need to process a short text, methods from the field of computational linguistics will give the best results. In order to build efficient user profiles, we collect a number of evidences from user's posts. Each evidence is a tuple...\TODO We separate evidences by source, which can origin from question body, answer body, question title, whole post thread or IQRS system. The more detailed description of data set that we used is given in next section.  
+There are many approaches to extract information from textual documents. The advantages of statistical approaches are mostly higher precision on large corpora, easier implementation and longer history of research. On the other hand, if we need to process a short text, methods from the field of computational linguistics will give the best results. In order to build efficient user profiles, we collect a number of evidences from user's posts. We separate evidences by source, which can origin from question body, answer body, question title, whole post thread or IQRS system. The more detailed description of data set that we used is given in next section.  
 
 Before the evidence extraction we first employ some preprocessing techniques. This step is carried the same way as in step 1 of the proposed algorithm (\secref{sec:alg}). From these we further extract evidences of the following types:
 
@@ -850,9 +773,9 @@ Also, in all three database types, for each user we also selected one additional
 
 \subsection{Results and Discussion}
 To evaluate our work we used mean reciprocal rank (MRR) and Precision@N (P@N) which are widely used in the field. They are defined as follows: (1) MRR is a measure to evaluate information retrieval task in which a list of possible responses to a query (question) is ordered by a probability of correctness. The score is defined as the average of the reciprocal ranks for a set of questions $Q$, where for each question from the dataset we determine the similarity to all available profiles and accordingly rank users, and then finally calculate the rank of the user that provided the best answer.
-$$
-	{\rm MRR = }\frac{1}{|Q|}\sum_{i=1}^{|Q|}\frac{1}{rank_i}. \TODO add number (12)
-$$
+\begin{equation}
+	{\rm MRR = }\frac{1}{|Q|}\sum_{i=1}^{|Q|}\frac{1}{rank_i}.
+\end{equation}
 (2) Precision is the fraction of the retrieved documents (users) that are relevant to a query (question). P@N is therefore precision which is evaluated at a given cut-off rank $N$ (i.e. considering only top $N$ results). In our domain it measures the proportion of correctly selected users among all users or intuitively a probability of how likely asking among the top $N$ selected users will result in getting a correct answer.
 \TODO
 
@@ -1149,59 +1072,32 @@ $$
 \begin{figure}[!t]
 	\centering
 	\includegraphics[width=3.3in]{type1questions_PAtN.pdf}
-	\caption{Precision @ N results for database type 1 using questions and categories evidences.}
+	\caption{Precision @ N results for database type 1 using questions and evidences from concept extractor and categories.}
 	\label{fig:pntype1}
 \end{figure}
 
 \begin{figure}[!t]
 	\centering
-	\includegraphics[width=3.3in]{type2answers_PAtN.pdf}
-	\caption{Precision @ N results for database type 2 using answers and categories evidences.}
-	\label{fig:pntype2}
-\end{figure}
-
-\begin{figure}[!t]
-	\centering
 	\includegraphics[width=3.3in]{type3answers_PAtN.pdf}
-	\caption{Precision @ N results for database type 3 using answers and categories evidences.}
+	\caption{Precision @ N results for database type 3 using answers and evidences from concept extractor and categories.}
 	\label{fig:pntype3}
 \end{figure}
 
 
-\begin{figure*}[!t]
+\begin{figure}[!t]
 	\centering
-	\includegraphics[width=\textwidth]{mrrType1Questions.pdf}
-	\caption{Mean reciprocal rank scores for database of type 1 on questions evidences.}
+	\includegraphics[width=0.5\textwidth]{mrrType1Questions.pdf}
+	\caption{Mean reciprocal rank scores for database of type 1 on question evidences.}
 	\label{fig:mrrtype1}
-\end{figure*}
+\end{figure}
 
-\begin{figure*}[!t]
+\begin{figure}[!t]
 	\centering
-	\includegraphics[width=\textwidth]{mrrType2Answers.pdf}
+	\includegraphics[width=0.5\textwidth]{mrrType2Answers.pdf}
 	\caption{Mean reciprocal rank scores for database of type 2 on answers evidences.}
 	\label{fig:mrrtype2}
-\end{figure*}
+\end{figure}
 
-\begin{figure*}[!t]
-	\centering
-	\includegraphics[width=\textwidth]{mrrType3Answers.pdf}
-	\caption{Mean reciprocal rank scores for database of type 3 on answers evidences.}
-	\label{fig:mrrtype3}
-\end{figure*}
-
-\begin{figure*}[!t]
-	\centering
-	\includegraphics[width=\textwidth]{mrrType2Thread.pdf}
-	\caption{Mean reciprocal rank scores for database of type 2 on thread evidences.}
-	\label{fig:mrrtype3}
-\end{figure*}
-
-\begin{figure*}[!t]
-	\centering
-	\includegraphics[width=\textwidth]{mrrType3Thread.pdf}
-	\caption{Mean reciprocal rank scores for database of type 3 on thread evidences.}
-	\label{fig:mrrtype3}
-\end{figure*}
 
 \section{Conclusion}
 \label{sec:conclusion}
