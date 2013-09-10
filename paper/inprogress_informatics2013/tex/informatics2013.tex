@@ -849,11 +849,11 @@ Also, in all three database types, for each user we also selected one additional
 \end{table}
 
 \subsection{Results and Discussion}
-To evaluate our work we use metrics mean reciprocal rank (MRR) and Precision@N (P@N) which are widely used in the field. They are defined as follows: (1) MRR is a measure to evaluate information retrieval task in which a list of possible responses to a query is ordered by a probability of correctness. The score is defined as the average of the reciprocal ranks for a set of queries $Q$,
+To evaluate our work we used mean reciprocal rank (MRR) and Precision@N (P@N) which are widely used in the field. They are defined as follows: (1) MRR is a measure to evaluate information retrieval task in which a list of possible responses to a query (question) is ordered by a probability of correctness. The score is defined as the average of the reciprocal ranks for a set of questions $Q$, where for each question from the dataset we determine the similarity to all available profiles and accordingly rank users, and then finally calculate the rank of the user that provided the best answer.
 $$
-	{\rm MRR = }\frac{1}{|Q|}\sum_{i=1}^{|Q|}\frac{1}{rank_i}.
+	{\rm MRR = }\frac{1}{|Q|}\sum_{i=1}^{|Q|}\frac{1}{rank_i}. \TODO add number (12)
 $$
-(2) Precision is the fraction of the documents retrieved that are relevant to a query. P@N is therefore precision which is evaluated at a given cut-off rank $N$ (i.e. considering only top $N$ results). In our domain it measures the proportion of correctly selected experts among all experts or intuitively a probability of how likely asking among the top $N$ experts will result in getting a correct answer.
+(2) Precision is the fraction of the retrieved documents (users) that are relevant to a query (question). P@N is therefore precision which is evaluated at a given cut-off rank $N$ (i.e. considering only top $N$ results). In our domain it measures the proportion of correctly selected users among all users or intuitively a probability of how likely asking among the top $N$ selected users will result in getting a correct answer.
 \TODO
 
 
