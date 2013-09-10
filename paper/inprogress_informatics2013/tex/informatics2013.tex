@@ -493,7 +493,7 @@ Intelligent Question Routing Systems (IQRS) aim to serve as a knowledge exchange
 % no \IEEEPARstart
 The key functionality of Intelligent Question Routing Systems (IQRS) is that for a question addressed by a user, to provide a good answer by searching the list of all (other) available users. The answer is provided by selecting a certain number of competent users (experts) and forwarding them the question. Selected users can provide an answer, which is then returned to the user that posed the question. The survey of state of the art in IQRS is given in \cite{bib:survey2013} which introduced an original presentation paradigm that generalizes the essence of approaches found in the open literature. The presentation paradigm includes three basic processing stages related to the three major problems of system implementation: question analysis, question forwarding, and users' knowledge profiling. All approaches presented in the survey are analyzed regarding these three basic processing stages. The outcome of the analysis was a proposal for new approaches that tackle identified problems and the work presented in this paper is a consequence of this research.
 
-Questions are usually short in length and even may be ambiguous. Therefore, as a format for acquisition, storing and representation of information related to questions or user profiles, we have chosen an approach in which the detected concepts are presented in the form of concepts cloud (similar to TagCloud visualization) \cite{bib:TAG07, bib:TAG08}. One advantage of this approach is that ``a significant concept has assigned a higher weight,'' which provides an intuitive idea of specific relationships between concepts and their importance in the question. Therefore, the generated concept cloud represents a set of information that describes the question. Concepts together with their weights in this set make the specific context in a broader sense which represents a fingerprint of processed text. This fingerprint is specific to each question and it is similar for questions with the same subject and the same meaning. Finally, this fingerprint reveals specific relationships between questions, and the relationship between the question and the topics which the question touches. On the other hand, for each user IQRS system is maintaining profile which is represented in the same way, describing user’s interests based on his/her questions and answers. Therefore, identified concepts from questions and user profiles are represented as pairs (keyword, weight) which are further referred as evidences.
+Questions are usually short in length and even may be ambiguous. Therefore, as a format for acquisition, storing and representation of information related to questions or user profiles, we have chosen an approach in which the detected concepts are presented in the form of concepts cloud (similar to TagCloud visualization) \cite{bib:TAG07, bib:TAG08}. One advantage of this approach is that ``a significant concept has assigned a higher weight,'' which provides an intuitive idea of specific relationships between concepts and their importance in the question. Therefore, the generated concept cloud represents a set of information that describes the question. Concepts together with their weights in this set make the specific context in a broader sense which represents a fingerprint of processed text. This fingerprint is specific to each question and it is similar for questions with the same subject and the same meaning. Finally, this fingerprint reveals specific relationships between questions, and the relationship between the question and the topics which the question touches. On the other hand, for each user IQRS system is maintaining profile which is represented in the same way, describing user’s interests based on his/her questions and answers. Therefore, identified concepts from questions and user profiles are represented as pairs (keyword, weight) which are further referred as {\it evidences}.
 
 The task of finding a competent user is done by comparing the information extracted from the question with all available user profiles, giving a ranked list of users or ``candidates to answer''. Based on this ranked list one or more users can be selected, which then should be contacted for an answer. Since the information extracted from the question as well as those maintained in the user profiles are presented in the same way, as lists of evidences, comparison of these two lists is reduced to the calculation of their similarity. Determining the similarity can be carried out by exact comparison, i.e. determining exact matching between words, or by calculating the semantic similarity. Since the question can be semantically very similar to the profile, but still lexically very different, the better results can be achieved by using the semantic similarity. As an example that illustrates this point we can use the appearance of synonyms, words with the identical or very similar meaning, but very different in its form (e.g. words intelligent and smart). Therefore, the main focus of the work presented in this paper is calculation of semantic similarity between the question and the user profile, as well as semantic information extraction from questions and answers in order to calculate this similarity.
 
@@ -617,7 +617,7 @@ This section describes phase-by-phase the algorithm of determining the numerical
 	{\rm sum(a,b)}\;=\;a+b-a\cdot b
 \end{equation}
 
-After the preprocessing input data, the question is represented with a array $Q$ given in \ref{eq:q} and the profile $P$ is given in \ref{eq:p}. $Q$ consists of pairs $(q_i,w(q_i))$ representing evidences, where $q_i$ is the keyword and $w(q_i)$ is its assigned weight. Similarly, $P$ is consisted of pairs $(u_i,w(u_i))$. The length of array $Q$ is $m$ and for $P$ is $n$.
+After the preprocessing input data, the question is represented with a array $Q$ given in (\ref{eq:q}) and the profile $P$ is given in (\ref{eq:p}). $Q$ consists of pairs $(q_i,w(q_i))$ representing evidences, where $q_i$ is the keyword and $w(q_i)$ is its assigned weight. Similarly, $P$ is consisted of pairs $(u_i,w(u_i))$. The length of array $Q$ is $m$ and for $P$ is $n$.
 \begin{equation}
 	\label{eq:q}
 	Q = \{(q_1,w(q_1)),(q_2,w(q_2)),\ldots(q_m,w(q_m))\}
@@ -663,7 +663,7 @@ After calculating their values, we add them up into a similarity sum $S_{same}$,
 \end{equation}
 
 
-5. {\it Similarity matrix unification} combines the string and the semantic similarity matrices into one by multiplying their values by a certain ponderation factor and adding them up as in \ref{eq:m3a}. We used ponderation values of 0.45 and 0.55 for the string and semantic similarity scores, respectively.
+5. {\it Similarity matrix unification} combines the string and the semantic similarity matrices into one by multiplying their values by a certain ponderation factor and adding them up as in (\ref{eq:m3a}). We used ponderation values of 0.45 and 0.55 for the string and semantic similarity scores, respectively.
 \begin{eqnarray}
 	\label{eq:m3a}
 	M_3 & = & \psi M_1 + \varphi M_2 \\
@@ -681,7 +681,7 @@ After calculating their values, we add them up into a similarity sum $S_{same}$,
 \right)
 \end{equation}
 
-6. The {\it weighted matrix construction} begins with the creation of a normalized weighted matrix in which every cell is occupied by a weight $w(q_i,u_j)$ calculated using \ref{eq:w}. The final similarity matrix $M_4$, shown in \ref{eq:m4}, is gained by multiplying each cell of the unified similarity matrix with the corresponding value $\gamma_{i,j}$ from $M_3$.
+6. The {\it weighted matrix construction} begins with the creation of a normalized weighted matrix in which every cell is occupied by a weight $w(q_i,u_j)$ calculated using (\ref{eq:w}). The final similarity matrix $M_4$, shown in \ref{eq:m4}, is gained by multiplying each cell of the unified similarity matrix with the corresponding value $\gamma_{i,j}$ from $M_3$.
 \begin{equation}
 	\label{eq:m4}
 	M_4 = 
@@ -706,7 +706,7 @@ For MaxSim approach this step is executed differently since we wanted to determi
 	
 \section{User Profiling}
 \label{sec:userprofiling}
-There are many approaches to extract information from textual documents. The advantages of statistical approaches are mostly higher precision on large corpora, easier implementation and longer history of research. On the other hand, if we need to process a short text, methods from the field of computational linguistics will give the best results. In order to build efficient user profiles, we collect a number of evidences from user's posts. We separate evidences by source, which can origin from question body, answer body, question title, whole post thread or IQRS system. The more detailed description of data set that we used is given in next section.  
+There are many approaches to extract information from textual documents. The advantages of statistical approaches are mostly higher precision on large corpora, easier implementation and longer history of research. On the other hand, if we need to process a short text, methods from the field of computational linguistics will give the best results. In order to build efficient user profiles, we collect a number of evidences from user's posts. We separate evidences by source, which can origin from question body, answer body, question title, whole post thread or IQRS system. The more detailed description of data set that we used is given in the next section.  
 
 Before the evidence extraction we first employ some preprocessing techniques. This step is carried the same way as in step 1 of the proposed algorithm (\secref{sec:alg}). From these we further extract evidences of the following types:
 
@@ -734,7 +734,7 @@ Each post also contains associated categories. In our dataset there are three hi
 
 
 \section{Evaluation}
-\TODO write section intro
+This section contains an overview of available datasets and the one that we created from Yahoo! Answers L6 dataset, and as well results of evaluation and discussion.
 
 
 \subsection{Dataset}
@@ -772,11 +772,13 @@ Also, in all three database types, for each user we also selected one additional
 \end{table}
 
 \subsection{Results and Discussion}
-To evaluate our work we used mean reciprocal rank (MRR) and Precision@N (P@N) which are widely used in the field. They are defined as follows: (1) MRR is a measure to evaluate information retrieval task in which a list of possible responses to a query (question) is ordered by a probability of correctness. The score is defined as the average of the reciprocal ranks for a set of questions $Q$, where for each question from the dataset we determine the similarity to all available profiles and accordingly rank users, and then finally calculate the rank of the user that provided the best answer.
+To evaluate our work we used mean reciprocal rank (MRR) and Precision@N (P@N) which are widely used in the field. They are defined as follows: (1) MRR is a measure to evaluate information retrieval task in which a list of possible responses to a query (question) is ordered by a probability of correctness. The score is defined in (\ref{eq:mrr}) as the average of the reciprocal ranks for a set of questions $Q$, where for each question from the dataset we determine the similarity to all available profiles and accordingly rank users, and then finally calculate the rank of the user that provided the best answer.
 \begin{equation}
+	\label{eq:mrr}
 	{\rm MRR = }\frac{1}{|Q|}\sum_{i=1}^{|Q|}\frac{1}{rank_i}.
 \end{equation}
-(2) Precision is the fraction of the retrieved documents (users) that are relevant to a query (question). P@N is therefore precision which is evaluated at a given cut-off rank $N$ (i.e. considering only top $N$ results). In our domain it measures the proportion of correctly selected users among all users or intuitively a probability of how likely asking among the top $N$ selected users will result in getting a correct answer.
+(2) Precision is the fraction of the retrieved documents (users) that are relevant to a query (question). Here we count as a relevant user the one that provided the answer to the question that was selected as the best one. P@N is therefore precision which is evaluated at a given cut-off rank $N$ (i.e. considering only top $N$ results). In our domain it measures the proportion of correctly selected users among all users or intuitively a probability of how likely asking among the top $N$ selected users will result in getting a correct answer.
+
 \TODO
 
 
