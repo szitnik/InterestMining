@@ -820,9 +820,9 @@ We reviewed many question answering (QA) systems and datasets. Finally, we decid
 
 Yahoo! Answers is a QA site where people post questions and answers, which are publicly available to any web user. The L6 dataset was collected from this site in 2007 and it includes all the questions (i.e. 4483032) and their corresponding answers. Next to these data some anonymized metadata is included, so that we can can extract evidences related to the each user.
 
-Questions and answers represent instances of post type and one question with its all available answers forms a thread. Each post instance consists of text in the body, selection of main category, category and subcategory and the id of the user who wrote the post. Questions additionally contain also title. For answer posts, the owner user is known only if it was considered as the best answer for the question, which imposed the limitation that only for the user that provided the best answer we can relate extracted evidences.
+Questions and answers represent instances of post type and a question with all available answers forms a thread. Each post instance consists of text in the body, selection of main category, category and subcategory and the id of the user who wrote the post. Questions additionally contain also a title. For answer posts, a owner user is known only if this post was considered as the best answer for the question, which imposed the limitation that only for the users that provided the best answer we can relate extracted evidences.
 
-User instances are completely anonymized, so we modeled them using their id. Also, we counted how many answers or questions the users posted in specific category type.
+Depending of the post type from which evidences are extracted we distinguish Question, Answer, and Thread type of evidences. User instances are completely anonymized, so we modeled them using their id number. Also, for each user we counted how many answers or questions he/she posted in specific category type.
 
 From the full dataset we extracted three database types:
 \begin{itemize}
