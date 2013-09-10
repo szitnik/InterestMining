@@ -1,4 +1,3 @@
-
 %% bare_conf.tex
 %% V1.3
 %% 2007/01/11
@@ -611,13 +610,15 @@ The rest of the section gives a brief description of algorithms and tools that a
 	
 \section{Semantic Similarity}
 \label{sec:alg}
-This section describes phase-by-phase the algorithm of determining the numerical similarity score between the question and the user profile, followed by an example of the execution. 	
+This section describes phase-by-phase the algorithm of determining the numerical similarity score between the question and the user profile, followed by an example of the execution. 
+	
 1. {\it Preprocessing} begins with the text cleaning procedure which deletes all text characters not belonging to the native script of the language in question, removes numbers and words that contain numbers, eliminates punctuation marks, removes stopwords, shifts all capital letters into lower caseand finally, lemmatizes them. Processing then continues with the removal of stop words from the given texts and the remaining words from both texts are then stemmed. After this stage, if there are evidences where their keyword consists of more than one word, for each word is created new evidence with the same weight as the original one, e.g. from evidence (botanical gardens, 0.5) two evidences are created (botanical, 0.5) and (gardens, 0.5). If there are multiple evidences with the same keyword they are merged into one by calculating resulting weight with the probabilistic T-conorm: 
 \begin{equation}
 	\label{eq:tconorm}
 	{\rm sum(a,b)}\;=\;a+b-a\cdot b
 \end{equation}
-After the preprocessing input data, the question is represented with a array $Q$ given in \ref{eq:q} and the profile $P$ is given in \ref{eq:p}. $Q$ consists of pairs $(q_i,w(q_i))$ representing evidences, where $q_i$ is the keyword and $w(q_i)$ is its assigned weight. Similarly, $P$ is consisted of pairs $(u_i,w(u_i))$. The length of array $Q$ is $m$ and for $P$ is $n$.
+
+After the preprocessing input data, the question is represented with a array $Q$ given in \ref{eq:q} and the profile $P$ is given in \ref{eq:p}. $Q$ consists of pairs $(q_i,w(q_i))$ representing evidences, where $q_i$ is the keyword and $w(q_i)$ is its assigned weight. Similarly, $P$ is consisted of pairs $(u_i,w(u_i))$. The length of array $Q$ is $m$ and for $P$ is $n$.
 \begin{equation}
 	\label{eq:q}
 	Q = \{(q_1,w(q_1)),(q_2,w(q_2)),\ldots(q_m,w(q_m))\}
@@ -626,13 +627,18 @@ This section describes phase-by-phase the algorithm of determining the numerical
 \begin{equation}
 	\label{eq:p}
 	U=\{(u_1,w(u_1)),(u_2,w(u_2)),\ldots(u_n,w(u_n))\}
-\end{equation}    2. {\it Processing of keywords appearing in both question and profile} starts with the identification of those words which are then removed from further processing. Their similarity scores are equal to 1, so their final weight is equal to normalized weight $w(q_i,u_i)$, which is calculated using $w(q_i)$ and $w(u_j)$ as follows:
+\end{equation}
+
+    
+2. {\it Processing of keywords appearing in both question and profile} starts with the identification of those words which are then removed from further processing. Their similarity scores are equal to 1, so their final weight is equal to normalized weight $w(q_i,u_i)$, which is calculated using $w(q_i)$ and $w(u_j)$ as follows:
 \begin{equation}
 	\label{eq:w}
 	w(q_i,u_j)=2^{w(q_i)\cdot w(u_j)-1}
 \end{equation}
 
-After calculating their values, we add them up into a similarity sum $S_{same}$, and then discard these words from further consideration. For MaxSim this step is omitted since we want to determine the highest (maximum) similarity, as it will be explained in step 7.3. {\it String similarity matrix construction} creates a matrix $M_1$ with dimensions $m\times n$ in which every cell is occupied by a numerical value $\alpha$, which lies between 0 and 1 representing the string similarity between the column-word and the row-word. The rows of the matrix are used for the remaining words from the question, while the columns represent the remaining words from the profile. A zero value denotes entirely different string contents, while a value of one indicates a perfect string match. The approach which we used to calculate string similarity is the same as in \cite{bib:LinSTSS}.
+After calculating their values, we add them up into a similarity sum $S_{same}$, and then discard these words from further consideration. For MaxSim this step is omitted since we want to determine the highest (maximum) similarity, as it will be explained in step 7.
+
+3. {\it String similarity matrix construction} creates a matrix $M_1$ with dimensions $m\times n$ in which every cell is occupied by a numerical value $\alpha$, which lies between 0 and 1 representing the string similarity between the column-word and the row-word. The rows of the matrix are used for the remaining words from the question, while the columns represent the remaining words from the profile. A zero value denotes entirely different string contents, while a value of one indicates a perfect string match. The approach which we used to calculate string similarity is the same as in \cite{bib:LinSTSS}.
 
 \begin{equation}
 	\label{eq:m1}
@@ -644,7 +650,11 @@ After calculating their values, we add them up into a similarity sum $S_{same}$,
 		\alpha_{m1} & \cdots & \alpha_{mn} 
 	\end{array} 
 \right)
-\end{equation}4. {\it Semantic similarity matrix construction} creates a matrix $M_2$ with dimensions $m\times n$ in which every cell is occupied by a numerical value $\beta$ which lies between 0 and 1 representing the semantic similarity between the column-word and the row-word. The rows of the matrix are used for the words from the question, while the columns represent the words from the profile. Similar to the string similarity measurement, a zero value denotes entirely different semantic contents, while a value of one indicates a perfect semantic match. We gain the semantic similarity of words in a pair by calculating the cosine similarity in the same way as in \cite{bib:LinSTSS}.\begin{equation}
+\end{equation}
+
+4. {\it Semantic similarity matrix construction} creates a matrix $M_2$ with dimensions $m\times n$ in which every cell is occupied by a numerical value $\beta$ which lies between 0 and 1 representing the semantic similarity between the column-word and the row-word. The rows of the matrix are used for the words from the question, while the columns represent the words from the profile. Similar to the string similarity measurement, a zero value denotes entirely different semantic contents, while a value of one indicates a perfect semantic match. We gain the semantic similarity of words in a pair by calculating the cosine similarity in the same way as in \cite{bib:LinSTSS}.
+
+\begin{equation}
 	\label{eq:m2}
 	M_2 = 
 \left( 
@@ -654,7 +664,12 @@ After calculating their values, we add them up into a similarity sum $S_{same}$,
 		\beta_{m1} & \cdots & \beta_{mn} 
 	\end{array} 
 \right)
-\end{equation}5. {\it Similarity matrix unification} combines the string and the semantic similarity matrices into one by multiplying their values by a certain ponderation factor and adding them up as in \ref{eq:m3a}. We used ponderation values of 0.45 and 0.55 for the string and semantic similarity scores, respectively.\begin{eqnarray}
+\end{equation}
+
+
+5. {\it Similarity matrix unification} combines the string and the semantic similarity matrices into one by multiplying their values by a certain ponderation factor and adding them up as in \ref{eq:m3a}. We used ponderation values of 0.45 and 0.55 for the string and semantic similarity scores, respectively.
+
+\begin{eqnarray}
 	\label{eq:m3a}
 	M_3 & = & \psi M_1 + \varphi M_2 \\
 	1 & = & \psi + \varphi
@@ -670,7 +685,11 @@ After calculating their values, we add them up into a similarity sum $S_{same}$,
 		\gamma_{m1} & \cdots & \gamma_{mn} 
 	\end{array} 
 \right)
-\end{equation}6. The {\it weighted matrix construction} begins with the creation of a normalized weighted matrix in which every cell is occupied by a weight $w(q_i,u_j)$ calculated using \ref{eq:w}. The final similarity matrix $M_4$, shown in \ref{eq:m4}, is gained by multiplying each cell of the unified similarity matrix with the corresponding value $\gamma_{i,j}$ from $M_3$.\begin{equation}
+\end{equation}
+
+6. The {\it weighted matrix construction} begins with the creation of a normalized weighted matrix in which every cell is occupied by a weight $w(q_i,u_j)$ calculated using \ref{eq:w}. The final similarity matrix $M_4$, shown in \ref{eq:m4}, is gained by multiplying each cell of the unified similarity matrix with the corresponding value $\gamma_{i,j}$ from $M_3$.
+
+\begin{equation}
 	\label{eq:m4}
 	M_4 = 
 \left( 
@@ -680,9 +699,13 @@ After calculating their values, we add them up into a similarity sum $S_{same}$,
 		w(q_m,u_1)\cdot \gamma_{m1} & \cdots & w(q_m,u_n)\cdot \gamma_{mn} 
 	\end{array} 
 \right)
-\end{equation}7. {\it Best word pair selections} start with the final similarity matrix. The goal is to match words according to their mutual similarity score. Hence, we search for the highest value within the final similarity matrix, and add it to a similarity sum $S_{different}$. We then remove the row and the column of the matrix to which the selected cell belonged, thereby discarding all other word pairs in which words from the chosen pair appeared. We repeat this procedure until there are no more rows and/or columns left in the matrix.
- For MaxSim approach this step is executed differently since we wanted to determine the highest (maximum) similarity between evidences from question to profile, but not vice versa. Therefore, only for each row, which represents words from the question, we search for the highest value within the final similarity matrix, and add it to a similarity sum $S_{different}$. Since in the step 2 none of the words is omitted for this approach, $S_{same}=0$.
- 8. The {\it final similarity score calculation} is performed by utilizing the following formula:
+\end{equation}
+
+7. {\it Best word pair selections} start with the final similarity matrix. The goal is to match words according to their mutual similarity score. Hence, we search for the highest value within the final similarity matrix, and add it to a similarity sum $S_{different}$. We then remove the row and the column of the matrix to which the selected cell belonged, thereby discarding all other word pairs in which words from the chosen pair appeared. We repeat this procedure until there are no more rows and/or columns left in the matrix.
+ 
+For MaxSim approach this step is executed differently since we wanted to determine the highest (maximum) similarity between evidences from question to profile, but not vice versa. Therefore, only for each row, which represents words from the question, we search for the highest value within the final similarity matrix, and add it to a similarity sum $S_{different}$. Since in the step 2 none of the words is omitted for this approach, $S_{same}=0$.
+ 
+8. The {\it final similarity score calculation} is performed by utilizing the following formula:
  
  \begin{equation}
 	\label{eq:s}
@@ -797,9 +820,9 @@ We reviewed many question answering (QA) systems and datasets. Finally, we decid
 
 Yahoo! Answers is a QA site where people post questions and answers, which are publicly available to any web user. The L6 dataset was collected from this site in 2007 and it includes all the questions (i.e. 4483032) and their corresponding answers. Next to these data some anonymized metadata is included, so that we can can extract evidences related to the each user.
 
-Instances of post type represent questions and answers. Each instance consists of text in the body, selection of main category, category and subcategory and the id of the user who wrote the post. Questions additionally contain also title. For answer posts, the owner user is known only if it was considered as the best answer for the question, which imposed the limitation that only for the user that provided the best answer we can relate extracted evidences.
+Questions and answers represent instances of post type and a question with all available answers forms a thread. Each post instance consists of text in the body, selection of main category, category and subcategory and the id of the user who wrote the post. Questions additionally contain also a title. For answer posts, a owner user is known only if this post was considered as the best answer for the question, which imposed the limitation that only for the users that provided the best answer we can relate extracted evidences.
 
-User instances are completely anonymized, so we modeled them using their id. Also, we counted how many answers or questions the users posted in specific category type.
+Depending of the post type from which evidences are extracted we distinguish Question, Answer, and Thread type of evidences. User instances are completely anonymized, so we modeled them using their id number. Also, for each user we counted how many answers or questions he/she posted in specific category type.
 
 From the full dataset we extracted three database types:
 \begin{itemize}
@@ -807,8 +830,8 @@ From the full dataset we extracted three database types:
 	\item {\bf Type 2}: To model knowledge, we extracted users who best answered at least ten questions. Again, each question thread needed to have at least five answers.
 	\item {\bf Type 3}: To jointly represent interest and knowledge, we extracted users that asked at least five questions and best answered at least five questions. Also, each of these threads needed to have at least five answers.
 \end{itemize}
-Each dataset type contains 100 users which are distinct across the datasets. As there are many different categories in the data, we representatively selected five of them and extracted 100 users for each dataset. Distribution of users per each categoriy is shown \tblref{tab:datasets}.
-
+Each database type contains 100 users which are distinct across the dataset. As there are many different categories in the original dataset, we representatively selected five of them and extracted 100 users for each dataset. Distribution of users per each category is shown in \tblref{tab:datasets}.
+Also, in all three database types, for each user we also selected one additional question for which he/she provided an answer that was considered as the best answer for that question. This question is then used for evaluation as explained in the following section. 
 \begin{table}[!h]
 	\centering
 	\renewcommand{\arraystretch}{1.3}
@@ -826,11 +849,11 @@ Each dataset type contains 100 users which are distinct across the datasets. As 
 \end{table}
 
 \subsection{Results and Discussion}
-To evaluate our work we use metrics mean reciprocal rank (MRR) and Precision@N (P@N) which are widely used in the field. They are defined as follows: (1) MRR is a measure to evaluate information retrieval task in which a list of possible responses to a query is ordered by a probability of correctness. The score is defined as the average of the reciprocal ranks for a set of queries $Q$,
+To evaluate our work we used mean reciprocal rank (MRR) and Precision@N (P@N) which are widely used in the field. They are defined as follows: (1) MRR is a measure to evaluate information retrieval task in which a list of possible responses to a query (question) is ordered by a probability of correctness. The score is defined as the average of the reciprocal ranks for a set of questions $Q$, where for each question from the dataset we determine the similarity to all available profiles and accordingly rank users, and then finally calculate the rank of the user that provided the best answer.
 $$
-	{\rm MRR = }\frac{1}{|Q|}\sum_{i=1}^{|Q|}\frac{1}{rank_i}.
+	{\rm MRR = }\frac{1}{|Q|}\sum_{i=1}^{|Q|}\frac{1}{rank_i}. \TODO add number (12)
 $$
-(2) Precision is the fraction of the documents retrieved that are relevant to a query. P@N is therefore precision which is evaluated at a given cut-off rank $N$ (i.e. considering only top $N$ results). In our domain it measures the proportion of correctly selected experts among all experts or intuitively a probability of how likely asking among the top $N$ experts will result in getting a correct answer.
+(2) Precision is the fraction of the retrieved documents (users) that are relevant to a query (question). P@N is therefore precision which is evaluated at a given cut-off rank $N$ (i.e. considering only top $N$ results). In our domain it measures the proportion of correctly selected users among all users or intuitively a probability of how likely asking among the top $N$ selected users will result in getting a correct answer.
 \TODO
 
 
